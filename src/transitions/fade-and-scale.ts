@@ -23,9 +23,8 @@ export const fadeAndScale = (
 				scale = maxScale - (maxScale - 1) * eased;
 			} else {
 				//from maxScale to 1
-				scale = 1 + (maxScale - 1) * eased;
+				scale = (maxScale - 1) * eased;
 			}
-			// from 1 to maxScale
 			return `
 				opacity: ${ eased };
 				transform: scale(${ scale });

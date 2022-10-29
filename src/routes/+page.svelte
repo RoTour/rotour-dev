@@ -52,7 +52,7 @@
   </span>
 
   <section class="h-screen flex flex-col justify-center"
-           in:fadeAndScale={{ duration: 800 }}
+           in:fadeAndScale={{ duration: 800, invert: true, maxScale: 2}}
            out:fadeAndScale={{ duration: 600, delay: 300, inverted: true, maxScale: 1.4 }}
            on:outroend={() => setAnimationState(false)}>
     <h1
