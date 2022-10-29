@@ -11,7 +11,7 @@
 		"strict": true,
 		"paths": {
 			"@components/*": [
-				"src/components/*"
+				"./src/components/*"
 			],
 			"@models/*": [
 				"./src/types/*"

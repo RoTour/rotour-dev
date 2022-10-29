@@ -1,0 +1,21 @@
+version: "3.7"
+
+services:
+  rotour-pocketbase:
+    container_name: rotour-pocketbase
+    image: augustodelg/pocketbase
+    restart: unless-stopped
+    ports:
+      - "10000:8090"
+    volumes:
+      - pocketbase-data:/pb_data
+
+  rotour-client:
+    container_name: rotour-client
+    image: rotour:client
+    restart: unless-stopped
+    ports:
+      - "10001:3000"
+
+volumes:
+  pocketbase-data:
