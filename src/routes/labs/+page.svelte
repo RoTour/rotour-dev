@@ -5,8 +5,7 @@
 	import { getCurrentBreakPoint } from '../../utils/tailwind-helper';
 	import CategoryItem from "./CategoryItem.svelte";
 
-	let navBarHeight: HTMLElement;
-	let blockRef: HTMLDivElement;
+	let navBarHeight: number;
 
 	let blockTranslate = 'translateY(0px)';
 
@@ -31,8 +30,7 @@
 </script>
 
 <Back bind:height={navBarHeight}/>
-<div bind:this={blockRef}
-     style={`height: ${blockHeight}; transform: ${blockTranslate}`} class={`
+<div style={`height: ${blockHeight}; transform: ${blockTranslate}`} class={`
   flex flex-col gap-4 mt-12 w-screen lg:mx-auto
   [&_h2>*]:font-poppins-bold [&_h2>*]:text-5xl
 `}>

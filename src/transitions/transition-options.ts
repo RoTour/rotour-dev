@@ -1,4 +1,4 @@
 export type TransitionOptions = {
-	duration: number
-	delay: number
+	duration?: number
+	delay?: number
 }

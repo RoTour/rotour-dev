@@ -5,12 +5,12 @@
 
 	type ListBoxItem = { label: string, value: never };
 	export let items: ListBoxItem[] = [];
-	export let selected: never = null;
-	export let label = 'name';
+	export let selected: ListBoxItem | undefined;
+	export let label: keyof ListBoxItem = 'label';
 
 	const dispatch = createEventDispatcher();
 
-	$: dispatch('change', selected);
+	$: dispatch('change', selected || null);
 
 </script>
 

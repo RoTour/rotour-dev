@@ -4,13 +4,13 @@ import { cubicOut } from 'svelte/easing';
 
 
 export const fadeAndScale = (
-	node: HTMLElement,
+	_: HTMLElement,
 	{
 		duration = 1000,
 		delay = 0,
 		inverted = false,
-		maxScale,
-	}: TransitionOptions & { inverted: boolean, maxScale: number },
+		maxScale = 2,
+	}: TransitionOptions & { inverted?: boolean, maxScale?: number },
 ): TransitionConfig => {
 	return {
 		delay,

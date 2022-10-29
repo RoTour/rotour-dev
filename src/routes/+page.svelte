@@ -6,9 +6,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	let bodyRef;
 	let show = false;
-	let windowHeight;
 	let animationRunning = false;
 	let redirect: string | null = null;
 
@@ -22,7 +20,6 @@
 
 	onMount(() => {
 		document.body.style.overflow = 'hidden';
-		windowHeight = window.innerHeight;
 		show = true;
 	});
 
@@ -69,7 +66,7 @@
       <SecondaryBtn onClick={() => animateExit('/projects')}>(🔨WIP) Projects</SecondaryBtn>
       <SecondaryBtn onClick={() => animateExit('/components')}>(🔨WIP) Components</SecondaryBtn>
       <SecondaryBtn onClick={() => animateExit('/labs')}>(🔨WIP) Labs</SecondaryBtn>
-      <SecondaryBtn onClick={() => console.log(bodyRef)}>(🔨WIP) Testing</SecondaryBtn>
+      <SecondaryBtn onClick={() => console.log('test')}>(🔨WIP) Testing</SecondaryBtn>
     </div>
   </section>
 {/if}
