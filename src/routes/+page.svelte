@@ -20,7 +20,7 @@
 	};
 
 	onMount(() => {
-		document.body.style.overflow = 'hidden';
+		// document.body.style.overflow = 'hidden';
 		show = true;
 	});
 
@@ -44,7 +44,7 @@
 {#if show}
   <span in:fly={{duration: 800, x: -150, delay: 300}} out:fly={{duration: 800, x: -150}} class="block">
     <BgDecoration posTop="0" posLeft="0" width="25vw" height="25vw" rotate="45deg" translateY="-55%"
-                  translateX={"0%"}/>
+                  translateX="0%"/>
   </span>
   <span in:fly={{duration: 800, x: 150, delay: 300}} out:fly={{duration: 800, x: 150}}
         class="block absolute bottom-0 right-0">
@@ -66,7 +66,7 @@
       <SecondaryBtn onClick={() => animateExit('/projects')}>(🔨WIP) Projects</SecondaryBtn>
       <SecondaryBtn onClick={() => animateExit('/components')}>(🔨WIP) Components</SecondaryBtn>
       <SecondaryBtn onClick={() => animateExit('/labs')}>(🔨WIP) Labs</SecondaryBtn>
-      <SecondaryBtn onClick={() => console.log('test')}>(🔨WIP) Testing</SecondaryBtn>
+      <SecondaryBtn onClick={() => animateExit('/testing')}>(🔨WIP) Testing</SecondaryBtn>
     </div>
   </section>
 {/if}
