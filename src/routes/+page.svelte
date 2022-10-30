@@ -5,6 +5,7 @@
 	import { fadeAndScale } from '../transitions/fade-and-scale';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import GradientText from "@components/text/GradientText.svelte";
 
 	let show = false;
 	let animationRunning = false;
@@ -55,12 +56,11 @@
            in:fadeAndScale={{ duration: 800, invert: true, maxScale: 2}}
            out:fadeAndScale={{ duration: 600, delay: 300, inverted: true, maxScale: 1.4 }}
            on:outroend={() => setAnimationState(false)}>
-    <h1
-      class="w-max mx-auto text-6xl text-center text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-secondary mb-8">
+    <GradientText additionalClasses="w-max mx-auto text-6xl text-center mb-8">
       <span class="font-poppins-bold">Ro</span>
       <span class="font-poppins-bold text-black">::</span>
       <span class="font-poppins-bold">Tour</span>
-    </h1>
+    </GradientText>
 
     <div class="w-full p-4 md:w-1/2 lg:w-1/3 mx-auto grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-4">
       <SecondaryBtn onClick={() => animateExit('/projects')}>(🔨WIP) Projects</SecondaryBtn>
