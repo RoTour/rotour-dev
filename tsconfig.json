@@ -19,6 +19,9 @@
 			"@services/*": [
 				"./src/services/*"
 			],
+			"@types/*": [
+				"./src/types/*"
+			],
 			"$lib/*": [
 				"./src/lib/*"
 			]
