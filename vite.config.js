@@ -16,6 +16,7 @@ const config = {
 			'@components': path.resolve('src/components'),
 			'@models': path.resolve('./src/types'),
 			'@services': path.resolve('./src/services'),
+			'@types': path.resolve('./src/types'),
 		}
 	}
 };
