@@ -8,7 +8,6 @@
   let destination = '';
 
 	const beforeNavigating = (event) => {
-		console.log(event);
 		destination = event.detail;
 		visible = false;
   }

@@ -13,7 +13,6 @@
 
 	const animateExit = (nextUrl: string) => {
 		if (animationRunning) return;
-		console.log('animateExit');
 		show = false;
 		setAnimationState(true);
 		redirect = nextUrl;
@@ -25,19 +24,12 @@
 	});
 
 	const setAnimationState = (state: boolean) => {
-		console.log('setAnimationState', state);
 		animationRunning = state;
 	};
 
 	$: if (redirect && !animationRunning) {
 		goto(redirect);
 	}
-
-	$: {
-		console.log('animation running: ', animationRunning);
-	}
-
-
 </script>
 
 

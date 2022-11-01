@@ -9,7 +9,6 @@
   const getExpandedClass = () => {
 		if (!expanded) return '';
 		const currentBreakpoint = getCurrentBreakPoint()[1]
-		console.log('currentBreakpoint', currentBreakpoint);
     if (currentBreakpoint === 'sm') return 'width: 100vw;'
     return 'width: calc(100% + 6rem);'
   }

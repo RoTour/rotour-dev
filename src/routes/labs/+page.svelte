@@ -17,7 +17,6 @@
 
 	onMount(() => {
 		document.body.style.overflow = 'unset';
-		console.log('Current device:', getCurrentBreakPoint());
 
 		document.addEventListener('mousemove', (e) => {
 			if (getCurrentBreakPoint()[1] === 'sm' || getCurrentBreakPoint()[1] === 'md') return;
