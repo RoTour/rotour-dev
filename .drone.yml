@@ -20,6 +20,28 @@ steps:
       - name: docker_socket
         path: /var/run/docker.sock
 
+  - name: discord notification
+    image: appleboy/drone-discord
+    when:
+      status:
+        - failure
+        - success
+    settings:
+      webhook_id:
+        from_secret: discord_webhook_id
+      webhook_token:
+        from_secret: discord_webhook_token
+      message: "
+        Drone pipeline result for {{repo.name}}\n
+        Duration: {{since build.started}}\n
+        Commit: {{build.message}}\n
+        {{#success build.status}}
+          Build {{build.number}} ***succeeded***. Good job.
+        {{else}}
+          Build {{build.number}} ***failed***. Fix me please.
+        {{/success}}
+        "
+
 volumes:
   - name: docker_socket
     host:
