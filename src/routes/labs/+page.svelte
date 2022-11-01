@@ -31,6 +31,7 @@
 	const beforeNavigating = (event) => {
 		destination = event.detail;
 		visible = false;
+		goto(destination)
 	};
 
 	const onCategorySelected = (category: 'Web Development' | 'CSS Challenges' | 'Docker labs') => {
@@ -40,7 +41,7 @@
 </script>
 
 <AnimationFragment visible={visible}>
-  <div transition:fade on:outroend={() => goto(destination)}>
+  <div transition:fade >
     <Back links={[{name: "Home", href: "/"}]} on:navigate={beforeNavigating}/>
     <div style={`transform: ${blockTranslate.value}`} class="
     flex flex-col gap-4 w-screen lg:mx-auto select-none mt-4 lg:mt-6
