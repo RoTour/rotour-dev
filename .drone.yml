@@ -24,7 +24,6 @@ steps:
     image: appleboy/drone-discord
     when:
       status:
-        - failure
         - success
     settings:
       webhook_id:
@@ -32,15 +31,9 @@ steps:
       webhook_token:
         from_secret: discord_webhook_token
       message: "
-        Drone pipeline result for {{repo.name}}\n
-        Duration: {{since build.started}}\n
-        Commit: {{build.message}}\n
-        {{#success build.status}}
-          Build {{build.number}} ***succeeded***. Good job.
-        {{else}}
-          Build {{build.number}} ***failed***. Fix me please.
-        {{/success}}
+          Une nouvelle version de https://rotour.dev est disponible ! (version {{ build.version }})"
         "
+
 
 volumes:
   - name: docker_socket
