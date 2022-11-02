@@ -31,11 +31,14 @@
 	}];
 
 	onMount(() => {
-		document.body.style.overflow = 'unset';
+		document.body.style.overflow = 'hidden';
 
 		document.addEventListener('mousemove', (e) => {
 			if (getCurrentBreakPoint()[1] === 'sm' || getCurrentBreakPoint()[1] === 'md') return;
-			if (blockTranslate.locked) return;
+			if (blockTranslate.locked) {
+				blockTranslate.value = `translate(0, 0)`;
+				return;
+			}
 			const x = e.clientX / window.innerWidth;
 			const y = e.clientY / window.innerHeight;
 			blockTranslate.value = `translate(${ x * 50 - 25 }px, ${ y * 50 - 25 }px)`;
@@ -48,6 +51,8 @@
 			selectedComponent = null;
 			selectedCategory = '';
 			itemsBeenRemoved = false;
+			blockTranslate.locked = false;
+			blockTranslate.value = 'translate(0, 0)';
 			return;
 		}
 		visible = false;
@@ -86,7 +91,7 @@
         </div>
       {/each}
       {#if selectedCategory && selectedComponent && itemsBeenRemoved}
-        <div in:fly={{x: 500, duration:300}}>
+        <div transition:fly={{x: 500, duration:300}}>
           <svelte:component this={selectedComponent}></svelte:component>
         </div>
       {/if}
