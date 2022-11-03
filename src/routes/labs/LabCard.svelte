@@ -16,7 +16,7 @@
   [&>ol]:list-decimal [&>ol]:list-inside [&>ol]:my-2 [&>ol]:pl-4
   [&>li]:my-2 [&>li]:pl-4
   [&>a]:text-blue-500 [&>a]:hover:text-blue-700 [&>a]:underline
-  [&>img]:my-4 [&>img]:mx-auto [&>img]:rounded-xl [&>img]:shadow [&>img]:shadow-2xl [&>img]:drop-shadow-2xl [&>img]:box-decoration-clone
+  [&>img]:my-4 [&>img]:mx-auto [&>img]:rounded-xl [&>img]:shadow [&>img]:shadow-2xl [&>img]:drop-shadow-2xl [&>img]:box-decoration-clone [&>img]:border [&>img]:border-black
   [&>blockquote]:my-4 [&>blockquote]:p-4 [&>blockquote]:border-l-4 [&>blockquote]:border-black [&>blockquote]:border-2 [&>blockquote]:rounded-l-xl [&>blockquote]:bg-gray-100 [&>blockquote]:shadow [&>blockquote]:shadow-2xl [&>blockquote]:drop-shadow-2xl [&>blockquote]:box-decoration-clone
   [&>pre]:my-4 [&>pre]:p-4 [&>pre]:border-l-4 [&>pre]:border-black [&>pre]:border-2 [&>pre]:rounded-l-xl [&>pre]:bg-gray-100 [&>pre]:shadow [&>pre]:shadow-2xl [&>pre]:drop-shadow-2xl [&>pre]:box-decoration-clone
   [&>code]:my-4 [&>code]:p-4 [&>code]:border-l-4 [&>code]:border-black [&>code]:border-2 [&>code]:rounded-l-xl [&>code]:bg-gray-100 [&>code]:shadow [&>code]:shadow-2xl [&>code]:drop-shadow-2xl [&>code]:box-decoration-clone

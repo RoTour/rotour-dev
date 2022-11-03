@@ -26,8 +26,8 @@ export const fadeAndScale = (
 				scale = (maxScale - 1) * eased;
 			}
 			return `
-				opacity: ${ eased };
-				transform: scale(${ scale });
+				opacity: ${eased};
+				transform: scale(${scale});
 			`;
 		},
 	};
