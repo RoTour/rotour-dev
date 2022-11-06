@@ -1,11 +1,11 @@
 <script lang="ts">
   import SvelteMarkdown from "svelte-markdown";
 
-	export let content = '';
+  export let content = "";
 
 </script>
 
-<div class="p-4">
+<div class="p-4 lg:mt-8">
   <div class="
   m-4 p-4 w-full lg:w-3/4 border border-gray-600 border-2 rounded-xl mx-auto bg-white shadow shadow-2xl drop-shadow-2xl box-decoration-clone
   [&>h1]:text-2xl [&>h1]:font-poppins-bold [&>h1]:my-4

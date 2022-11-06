@@ -1,9 +1,9 @@
 <script lang="ts">
   import NavigationBtn from "@components/buttons/NavigationBtn.svelte";
-  import IconCarretLeft from "@components/icons/IconCarretLeft.svelte";
-  import IconCarretRight from "@components/icons/IconCarretRight.svelte";
+  import AnimatedIconArrowRight from "@components/icons/animated-icons/AnimatedIconArrowRight.svelte";
   import { onMount } from "svelte";
   import { fly } from "svelte/transition";
+  import IconCarretRight from "../../components/icons/IconCaretRight.svelte";
   import LabCard from "./LabCard.svelte";
 
   const files = [
@@ -66,14 +66,21 @@
 
 </script>
 
+<!--<div class="h-12 w-12 rotate-[135deg] hover:rotate-[495deg] transition-all duration-200 cursor-pointer hover:bg-gradient-to-r from-primary to-secondary rounded-xl"></div>-->
+<div
+  class="h-12 w-12 cursor-pointer rounded-xl relative transitioningGradientBg before:bg-gradient-to-r from-primary to-secondary"></div>
+
 {#if currentChapter !== -1}
   {#if currentChapter > 0 }
-    <NavigationBtn click={() => changeIndex(-1)} size={2} side={'left'}>
-      <IconCarretLeft />
-    </NavigationBtn>
+    <div on:keydown={() => changeIndex(-1)} on:click={() => changeIndex(-1)}>
+      <AnimatedIconArrowRight />
+    </div>
+    <!--    <NavigationBtn click={() => changeIndex(-1)} size={3} side={'left'}>-->
+    <!--      <IconCarretLeft />-->
+    <!--    </NavigationBtn>-->
   {/if}
   {#if currentChapter < contents.length - 1}
-    <NavigationBtn click={() => changeIndex(1)} size={2} side={'right'}>
+    <NavigationBtn click={() => changeIndex(1)} size={3} side={'right'}>
       <IconCarretRight />
     </NavigationBtn>
   {/if}
@@ -89,3 +96,20 @@
   {/if}
 {/each}
 
+<style>
+  div.transitioningGradientBg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 200ms ease-in-out;
+  }
+
+  div.transitioningGradientBg:hover::before {
+    opacity: 1;
+  }
+</style>
