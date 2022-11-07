@@ -31,11 +31,14 @@
 	}];
 
 	onMount(() => {
-		document.body.style.overflow = 'unset';
-
+    window.scrollTo(0, 0);
+		document.body.style.overflow = 'hidden';
 		document.addEventListener('mousemove', (e) => {
 			if (getCurrentBreakPoint()[1] === 'sm' || getCurrentBreakPoint()[1] === 'md') return;
-			if (blockTranslate.locked) return;
+			if (blockTranslate.locked) {
+				blockTranslate.value = `translate(0, 0)`;
+				return;
+			}
 			const x = e.clientX / window.innerWidth;
 			const y = e.clientY / window.innerHeight;
 			blockTranslate.value = `translate(${ x * 50 - 25 }px, ${ y * 50 - 25 }px)`;
@@ -48,6 +51,9 @@
 			selectedComponent = null;
 			selectedCategory = '';
 			itemsBeenRemoved = false;
+			blockTranslate.locked = false;
+			blockTranslate.value = 'translate(0, 0)';
+      window.scrollTo(0, 0);
 			return;
 		}
 		visible = false;
@@ -56,6 +62,7 @@
 
 	const onCategorySelected = (category: { name: string, component: Component }) => {
 		blockTranslate.locked = true;
+    blockTranslate.value = 'translate(0, 0)';
 		selectedCategory = category.name;
 		selectedComponent = category.component;
 	};
@@ -85,11 +92,11 @@
           {/key}
         </div>
       {/each}
+    </div>
       {#if selectedCategory && selectedComponent && itemsBeenRemoved}
-        <div in:fly={{x: 500, duration:300}}>
+        <div transition:fly={{x: 500, duration:300}}>
           <svelte:component this={selectedComponent}></svelte:component>
         </div>
       {/if}
-    </div>
   </div>
 </AnimationFragment>

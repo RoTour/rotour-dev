@@ -1,5 +1,12 @@
 <script lang="ts">
-	import BgDecoration from '@components/background/BgDecoration.svelte';
+  import AnimatedIconArrowRight from "../../components/icons/animated-icons/AnimatedIconArrow.svelte";
 </script>
 
-<BgDecoration height="30vh" width="30vh" posTop="50%" posLeft="50%" translateX="-50%" translateY="-50%" rotate="-45deg"/>
+<div class="h-screen w-screen flex justify-center items-center">
+  <!-- Testing Zone -->
+  <div class="">
+    <AnimatedIconArrowRight size="10rem" />
+  </div>
+
+  <!-- End of Testing Zone -->
+</div>

@@ -21,6 +21,7 @@ services:
     volumes:
       - ./src:/app/src
       - ./static:/app/static
+      - ./tailwind.config.cjs:/app/tailwind.config.cjs
 
 volumes:
   pocketbase-data:

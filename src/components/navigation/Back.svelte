@@ -1,14 +1,14 @@
 <!--Custom event : on:navigate -->
 <script lang="ts">
-	import IconLeftArrow from '@components/icons/IconLeftArrow.svelte';
-	import IconCarretRight from '@components/icons/IconCarretRight.svelte';
-	import { createEventDispatcher } from 'svelte';
+  import IconLeftArrow from "@components/icons/IconLeftArrow.svelte";
+  import { createEventDispatcher } from "svelte";
+  import IconCarretRight from "../icons/IconCaretRight.svelte";
 
-	const dispatch = createEventDispatcher();
-	export let height = 0;
-	export let links: { name: string, href: string }[] = [];
+  const dispatch = createEventDispatcher();
+  export let height = 0;
+  export let links: { name: string, href: string }[] = [];
 
-	const onNavigate = (href: string) => dispatch('navigate', href);
+  const onNavigate = (href: string) => dispatch("navigate", href);
 </script>
 
 <div bind:clientHeight={height} class="flex items-center">

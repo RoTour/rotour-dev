@@ -20,7 +20,8 @@
 <!--HitBox-->
 <div class="[&_h2]:hover:opacity-100 md:[&_h2]:hover:ml-12
             [&_span]:hover:w-screen md:[&_span]:hover:w-[calc(100%_+_6rem)] [&>div]:hover:bg-gray-100
-            py-4 cursor-pointer {expanded && 'pointer-events-none'}">
+            py-4 cursor-pointer {expanded && 'pointer-events-none'}
+            transition-all duration-300">
   <div class="w-full">
     <h2 class="transition-all duration-300 p-4 md:pl-16 relative w-fit {expanded && 'opacity-100 md:ml-12'}">
     <span class="absolute top-0 -left-1 md:-left-20 w-0 transition-all duration-300
