@@ -1,5 +1,5 @@
 <script lang="ts">
-  import AnimatedIconArrowRight from "@components/icons/animated-icons/AnimatedIconArrowRight.svelte";
+  import AnimatedIconArrowRight from "../../components/icons/animated-icons/AnimatedIconArrow.svelte";
 </script>
 
 <div class="h-screen w-screen flex justify-center items-center">

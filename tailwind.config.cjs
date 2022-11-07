@@ -25,9 +25,9 @@ module.exports = {
         "poppins-thin": ["poppins-thin"]
       },
       animation: {
-        "arrow": "arrow-anim 2.5s cubic-bezier(.1,0,.19,1) infinite",
-        "arrow-fixed": "arrow-fixed-anim 2.5s cubic-bezier(.1,0,.19,1) infinite",
-        "boop-left": "boop-left 0.5s cubic-bezier(.1,0,.19,1)"
+        "arrow": "arrow-anim 1s cubic-bezier(.1,0,.19,1) infinite",
+        "arrow-fixed": "arrow-fixed-anim 1s cubic-bezier(.1,0,.19,1) infinite",
+        "boop-left": "boop-left 0.4s cubic-bezier(.1,0,.19,1)"
       },
       keyframes: {
         "arrow-anim": {
@@ -64,5 +64,7 @@ module.exports = {
       }
     }
   },
-  plugins: []
+  plugins: [
+    require("@tailwindcss/typography")
+  ]
 };

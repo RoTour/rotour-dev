@@ -1,9 +1,8 @@
 <script lang="ts">
-  import NavigationBtn from "@components/buttons/NavigationBtn.svelte";
-  import AnimatedIconArrowRight from "@components/icons/animated-icons/AnimatedIconArrowRight.svelte";
   import { onMount } from "svelte";
-  import { fly } from "svelte/transition";
-  import IconCarretRight from "../../components/icons/IconCaretRight.svelte";
+  import { fade, fly } from "svelte/transition";
+  import AnimatedIconArrow from "../../components/icons/animated-icons/AnimatedIconArrow.svelte";
+  import { getCurrentBreakPoint } from "../../utils/tailwind-helper";
   import LabCard from "./LabCard.svelte";
 
   const files = [
@@ -32,6 +31,7 @@
   let previousExited = true;
   let transitioningTo = 0;
   let direction;
+  let breakpoint;
 
   onMount(async () => {
     document.body.style.overflowX = "hidden";
@@ -52,7 +52,7 @@
           currentChapter = 0;
         });
     }));
-
+    breakpoint = getCurrentBreakPoint()[1];
     contents = contents;
   });
 
@@ -63,53 +63,49 @@
     console.log({ transitioningTo, direction });
   };
 
+  $: {
+    console.log("Breakpoint changed", breakpoint);
+  }
 
 </script>
 
-<!--<div class="h-12 w-12 rotate-[135deg] hover:rotate-[495deg] transition-all duration-200 cursor-pointer hover:bg-gradient-to-r from-primary to-secondary rounded-xl"></div>-->
-<div
-  class="h-12 w-12 cursor-pointer rounded-xl relative transitioningGradientBg before:bg-gradient-to-r from-primary to-secondary"></div>
-
 {#if currentChapter !== -1}
   {#if currentChapter > 0 }
-    <div on:keydown={() => changeIndex(-1)} on:click={() => changeIndex(-1)}>
-      <AnimatedIconArrowRight />
+    <div on:keydown={() => changeIndex(-1)} on:click={() => changeIndex(-1)}
+         transition:fade={{ duration: 200 }}
+         class="fixed top-1/2 left-0 px-12">
+      <div class="hidden lg:block">
+        <AnimatedIconArrow size="4rem" direction="left" />
+      </div>
     </div>
-    <!--    <NavigationBtn click={() => changeIndex(-1)} size={3} side={'left'}>-->
-    <!--      <IconCarretLeft />-->
-    <!--    </NavigationBtn>-->
   {/if}
   {#if currentChapter < contents.length - 1}
-    <NavigationBtn click={() => changeIndex(1)} size={3} side={'right'}>
-      <IconCarretRight />
-    </NavigationBtn>
-  {/if}
-{/if}
-{#each contents as { chapter, file }, index}
-  {#if index === currentChapter && previousExited}
-    <div in:fly={{x: direction, duration: 300}}
-         out:fly={{x: -direction, duration: 300}}
-         on:outrostart={() => console.log("outrostart", direction)}
-         on:outroend={() => {currentChapter+=transitioningTo; previousExited = true}}>
-      <LabCard content={file} />
+    <div on:keydown={() => changeIndex(1)} on:click={() => changeIndex(1)}
+         transition:fade={{ duration: 200 }}
+         class="fixed top-1/2 right-0 px-12">
+      <div class="hidden lg:block">
+        <AnimatedIconArrow size="4rem" />
+      </div>
     </div>
   {/if}
-{/each}
+{/if}
 
-<style>
-  div.transitioningGradientBg::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 200ms ease-in-out;
-  }
-
-  div.transitioningGradientBg:hover::before {
-    opacity: 1;
-  }
-</style>
+{#if breakpoint === 'sm' || breakpoint === 'md'}
+  <div class="snap-x flex overflow-x-auto snap-mandatory	">
+    {#each contents as { chapter, file }, index}
+      <div class="snap-center w-screen min-w-fit max-w-screen ">
+        <LabCard content={file} />
+      </div>
+    {/each}
+  </div>
+{:else }
+  {#each contents as { chapter, file }, index}
+    {#if index === currentChapter && previousExited}
+      <div in:fly={{x: direction, duration: 300}}
+           out:fly={{x: -direction, duration: 300}}
+           on:outroend={() => {currentChapter+=transitioningTo; previousExited = true}}>
+        <LabCard content={file} />
+      </div>
+    {/if}
+  {/each}
+{/if}

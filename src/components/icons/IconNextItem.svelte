@@ -1,5 +1,5 @@
 <div class="[&_#MovingArrow]:hover:animate-arrow [&_#StaticArrow]:hover:animate-arrow-fixed
- [&_#Triangle]:hover:animate-boop-left [&>svg]:overflow-visible h-full w-full [&>svg]:w-full [&>svg]:h-full">
+ [&>svg]:overflow-visible h-full w-full [&>svg]:w-full [&>svg]:h-full">
   <svg class="" fill="none" height="100" viewBox="0 0 100 100" width="100"
        xmlns="http://www.w3.org/2000/svg">
     <g id="Frame 1">
