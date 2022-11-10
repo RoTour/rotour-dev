@@ -9,7 +9,7 @@
   import { getCurrentBreakPoint } from "../../utils/tailwind-helper";
   import CategoryItem from "./CategoryItem.svelte";
   import DockerLabs from "./DockerLabs.svelte";
-  import WebDev from "./WebDev.svelte";
+  import WebDev from "./LabManager.svelte";
 
   type Category = {
     name: string;
