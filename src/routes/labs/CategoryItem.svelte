@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { getCurrentBreakPoint } from '../../utils/tailwind-helper';
+  import { getCurrentBreakPoint } from "../../utils/tailwind-helper";
 
-	export let name = '';
-	export let expanded = false;
-	let bgClass;
+  export let name = "";
+  export let expanded = false;
+  export let className = "";
+  let bgClass;
 
 
   const getExpandedClass = () => {
@@ -23,7 +24,8 @@
             py-4 cursor-pointer {expanded && 'pointer-events-none'}
             transition-all duration-300">
   <div class="w-full">
-    <h2 class="transition-all duration-300 p-4 md:pl-16 relative w-fit {expanded && 'opacity-100 md:ml-12'}">
+    <h2
+      class="transition-all duration-300 p-4 md:pl-16 relative w-fit {expanded && 'opacity-100 md:ml-12'} {className}">
     <span class="absolute top-0 -left-1 md:-left-20 w-0 transition-all duration-300
                  h-full bg-gradient-to-r from-secondary via-primary to-primary z-10 block
                  {expanded && 'w-screen'}"
