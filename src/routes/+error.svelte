@@ -24,15 +24,15 @@
   }
 </script>
 
-<div class="h-screen flex flex-col">
+<div class="h-screen flex flex-col p-4">
   <Back links={[{name: "Home", href: "/"}]} on:navigate={beforeNavigating}/>
   <AnimationFragment visible={visible} className="flex-1 flex flex-col items-center justify-center">
-    <div class="flex flex-col items-center justify-center"
+    <div class="flex flex-col items-center justify-center p-4"
          in:fly={{y: 100, opacity: 0, duration: 300}} out:fly={{y: -100, opacity: 0, duration: 300}}
          on:outroend={onExit}>
-      <GradientText additionalClasses="text-8xl font-poppins-bold" type="p">Are you lost ?</GradientText>
+      <GradientText additionalClasses="text-4xl md:text-8xl font-poppins-bold text-center" type="p">Are you lost ?</GradientText>
       {#if $page.status === 404}
-        <p class="text-xl my-8">
+        <p class="text-lg md:text-xl my-8">
           The page you are looking for does not exist.
         </p>
         <PrimaryBtn click={() => visible = false}>Go back to Home page</PrimaryBtn>
