@@ -35,7 +35,9 @@
     <div class="flex flex-col items-center justify-center p-4"
          in:fly={{y: 100, opacity: 0, duration: 300}} out:fly={{y: -100, opacity: 0, duration: 300}}
          on:outroend={onExit}>
-      <GradientText additionalClasses="text-4xl md:text-8xl font-poppins-bold text-center" type="p">
+      <GradientText
+        className="text-4xl md:leading-tight {message.length > 10 ? 'md:text-7xl' : 'md:text-8xl'} font-poppins-bold text-center"
+        type="p">
         {message}
       </GradientText>
       {#if $page.status === 404}

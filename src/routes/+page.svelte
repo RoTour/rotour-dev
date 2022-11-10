@@ -1,21 +1,21 @@
 <script lang="ts">
-	import SecondaryBtn from '@components/buttons/SecondaryBtn.svelte';
-	import BgDecoration from '@components/background/BgDecoration.svelte';
-	import { fly } from 'svelte/transition';
-	import { fadeAndScale } from '../transitions/fade-and-scale';
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
-	import GradientText from "@components/text/GradientText.svelte";
+  import { goto } from "$app/navigation";
+  import BgDecoration from "@components/background/BgDecoration.svelte";
+  import SecondaryBtn from "@components/buttons/SecondaryBtn.svelte";
+  import GradientText from "@components/text/GradientText.svelte";
+  import { onMount } from "svelte";
+  import { fly } from "svelte/transition";
+  import { fadeAndScale } from "../transitions/fade-and-scale";
 
-	let show = false;
-	let animationRunning = false;
-	let redirect: string | null = null;
+  let show = false;
+  let animationRunning = false;
+  let redirect: string | null = null;
 
-	const animateExit = (nextUrl: string) => {
-		if (animationRunning) return;
-		show = false;
-		setAnimationState(true);
-		redirect = nextUrl;
+  const animateExit = (nextUrl: string) => {
+    if (animationRunning) return;
+    show = false;
+    setAnimationState(true);
+    redirect = nextUrl;
 	};
 
 	onMount(() => {
@@ -48,7 +48,7 @@
            in:fadeAndScale={{ duration: 800, invert: true, maxScale: 2}}
            out:fadeAndScale={{ duration: 600, delay: 300, inverted: true, maxScale: 1.4 }}
            on:outroend={() => setAnimationState(false)}>
-    <GradientText additionalClasses="w-max mx-auto text-6xl text-center mb-8">
+    <GradientText className="w-max mx-auto text-6xl text-center mb-8" type="h1">
       <span class="font-poppins-bold">Ro</span>
       <span class="font-poppins-bold text-black">::</span>
       <span class="font-poppins-bold">Tour</span>
