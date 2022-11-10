@@ -5,7 +5,9 @@
   import { getCurrentBreakPoint } from "../../utils/tailwind-helper";
   import LabCard from "./LabCard.svelte";
 
-  const files = [
+  export let contentType: "webdev" | "css" | "docker" = "webdev";
+
+  const webDevChapters = [
     { chapter: "Introduction", files: ["/webdev/part0-introduction/readme.md"] },
     { chapter: "HTML/CSS", files: ["/webdev/part1-html-css/readme.md"] },
     { chapter: "Javascript", files: ["/webdev/part2-js-intro/readme.md"] },
@@ -26,17 +28,32 @@
     }
   ];
 
+  const cssChapters = [
+    { chapter: "Circle arc", files: ["/csschanllenges/1-circle-arc/readme.md"] },
+    { chapter: "Album cover", files: ["/csschanllenges/2-album-cover/readme.md"] },
+    { chapter: "Card deck", files: ["/csschanllenges/3-card-stack/readme.md"] },
+    { chapter: "Reviews emojis", files: ["/csschanllenges/4-review-emojis/readme.md"] }
+  ];
+
+  const chapters = new Map<string, { chapter: string, files: string[] }[]>([
+    ["webdev", webDevChapters],
+    ["css", cssChapters],
+    ["docker", []]
+  ]);
+
   let contents: { chapter: string, file: string }[] = [];
-  let currentChapter = -1;
+  let currentChapterIndex = -1;
   let previousExited = true;
   let transitioningTo = 0;
   let direction;
   let breakpoint;
 
   onMount(async () => {
+    console.log(contentType);
+    const currentChapter = chapters.get(contentType) ?? webDevChapters;
     document.body.style.overflowX = "hidden";
     document.body.style.overflowY = "unset";
-    contents = files.reduce((acc: { chapter: string, file: string }[], curr: { chapter: string, files: string[] }) => {
+    contents = currentChapter.reduce((acc: { chapter: string, file: string }[], curr: { chapter: string, files: string[] }) => {
       acc.push(...curr.files.map(file => ({ chapter: curr.chapter, file })));
       return acc;
     }, []);
@@ -49,7 +66,7 @@
         })
         .then((res) => {
           contents[index].file = res;
-          currentChapter = 0;
+          currentChapterIndex = 0;
         });
     }));
     breakpoint = getCurrentBreakPoint()[1];
@@ -63,14 +80,10 @@
     console.log({ transitioningTo, direction });
   };
 
-  $: {
-    console.log("Breakpoint changed", breakpoint);
-  }
-
 </script>
 
-{#if currentChapter !== -1}
-  {#if currentChapter > 0 }
+{#if currentChapterIndex !== -1}
+  {#if currentChapterIndex > 0 }
     <div on:keydown={() => changeIndex(-1)} on:click={() => changeIndex(-1)}
          transition:fade={{ duration: 200 }}
          class="fixed top-1/2 left-0 px-12">
@@ -79,7 +92,7 @@
       </div>
     </div>
   {/if}
-  {#if currentChapter < contents.length - 1}
+  {#if currentChapterIndex < contents.length - 1}
     <div on:keydown={() => changeIndex(1)} on:click={() => changeIndex(1)}
          transition:fade={{ duration: 200 }}
          class="fixed top-1/2 right-0 px-12">
@@ -100,10 +113,10 @@
   </div>
 {:else }
   {#each contents as { chapter, file }, index}
-    {#if index === currentChapter && previousExited}
+    {#if index === currentChapterIndex && previousExited}
       <div in:fly={{x: direction, duration: 300}}
            out:fly={{x: -direction, duration: 300}}
-           on:outroend={() => {currentChapter+=transitioningTo; previousExited = true}}>
+           on:outroend={() => {currentChapterIndex+=transitioningTo; previousExited = true}}>
         <LabCard content={file} />
       </div>
     {/if}
