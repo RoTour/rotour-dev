@@ -31,7 +31,23 @@ steps:
       webhook_token:
         from_secret: discord_webhook_token
       message: >
-        Une nouvelle version de https://rotour.dev est disponible ! \nInfo: {{build.message}}\nversion {{build.version}}"
+        Une nouvelle version de https://rotour.dev est disponible !
+        Info: {{build.message}}
+        Version {{build.version}}
+        owner : {{repo.owner}}
+        name : {{repo.name}}
+        status : {{build.status}}
+        event : {{build.event}}
+        number : {{build.number}}
+        commit : {{build.commit}}
+        message : {{build.message}}
+        branch : {{build.branch}}
+        tag : {{build.tag}}
+        ref : {{build.ref}}
+        author : {{build.author}}
+        link : {{build.link}}
+        started : {{build.started}}
+        finished : {{build.finished}}
 
 
 volumes:
