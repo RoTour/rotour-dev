@@ -24,6 +24,7 @@
   let selectedCategory: Category | null = null;
   let selectedComponent;
   let itemsRemoved = false;
+  let initialMousePosition: { x: number, y: number } | null = null;
 
   const categories = [{
     name: "Web Development",
@@ -39,27 +40,44 @@
     contentType: "docker"
   }];
 
+  let listener;
+
   onMount(() => {
     window.scrollTo(0, 0);
     document.body.style.overflow = "hidden";
-    const movingBlock = document.getElementById("moving-block");
-    document.addEventListener("mousemove", (e) => {
-      if (getCurrentBreakPoint()[1] === "sm" || getCurrentBreakPoint()[1] === "md") return;
-      if (blockTranslate.locked) {
-        blockTranslate.value = `translate(0, 0)`;
-        return;
-      }
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-      blockTranslate.value = `translate(${ x * 50 - 25 }px, ${ y * 50 - 25 }px)`;
-      if (movingBlock.classList.contains("transition-all") && movingBlock.classList.contains("duration-500")) {
-        removeTransitionEffect();
-      }
-    });
+
+    if (getCurrentBreakPoint()[1] === "sm" || getCurrentBreakPoint()[1] === "md") return;
+    addMovingBlockListener();
   });
 
-  const beforeNavigating = (event) => {
-    console.log("before navigating");
+  const moveMainBlockSmoothly = (movingBlock: HTMLElement, e: MouseEvent) => {
+    if (blockTranslate.locked) {
+      blockTranslate.value = `translate(0, 0)`;
+      return;
+    }
+    if (!initialMousePosition) {
+      initialMousePosition = { x: e.clientX, y: e.clientY };
+    }
+    const x = (e.clientX - initialMousePosition.x) / 20;
+    const y = (e.clientY - initialMousePosition.y) / 15;
+    blockTranslate.value = `translate(${ x }px, ${ y }px)`;
+    if (movingBlock.classList.contains("transition-all") && movingBlock.classList.contains("duration-500")) {
+      removeTransitionEffect();
+    }
+  };
+
+  const addMovingBlockListener = () => {
+    blockTranslate.locked = false;
+    const movingBlock = document.getElementById("moving-block");
+    listener = (e) => moveMainBlockSmoothly(movingBlock, e);
+    document.addEventListener("mousemove", listener);
+  };
+
+  const removeMovingBlockListener = () => {
+    document.removeEventListener("mousemove", listener);
+  };
+
+  const onBackBtnClicked = (event) => {
     destination = event.detail;
 
     // if coming from inner component
@@ -69,8 +87,7 @@
       selectedComponent = null;
       selectedCategory = null;
       itemsRemoved = false;
-      blockTranslate.locked = false;
-      blockTranslate.value = "translate(0, 0)";
+      initialMousePosition = null;
       window.scrollTo(0, 0);
       return;
     }
@@ -81,6 +98,8 @@
 
   const onCategorySelected = (category: Category) => {
     addTransitionEffect();
+    removeMovingBlockListener();
+    initialMousePosition = null;
     blockTranslate.locked = true;
     blockTranslate.value = "translate(0, 0)";
     selectedCategory = category;
@@ -101,12 +120,11 @@
 
 <AnimationFragment visible={visible}>
   <div on:outroend={() => goto(destination)} transition:fade>
-    <Back links={[{name: "Back", href: "/"}]} on:navigate={beforeNavigating} />
+    <Back links={[{name: "Back", href: "/"}]} on:navigate={onBackBtnClicked} />
     <div class="
     flex flex-col gap-4 w-screen lg:mx-auto select-none mt-4 lg:mt-6
     [&_h2>*]:font-poppins-bold [&_h2>*]:text-5xl
   " id="moving-block" style={`transform: ${blockTranslate.value}`}>
-
 
       {#each categories.filter((it) => !selectedCategory || it.name === selectedCategory.name) as {
         name,
@@ -120,6 +138,7 @@
           out:fly={{x: -500, duration: 300, delay: 0}}
           on:outroend={() => (itemsRemoved = true)}
           on:introstart={() => (oldCategory = null)}
+          on:introend={addMovingBlockListener}
           animate:flip={{delay: 100, duration: 400}}
         >
           {#key selectedCategory}

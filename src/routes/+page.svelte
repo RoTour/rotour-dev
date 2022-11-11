@@ -4,6 +4,7 @@
   import SecondaryBtn from "@components/buttons/SecondaryBtn.svelte";
   import GradientText from "@components/text/GradientText.svelte";
   import { onMount } from "svelte";
+  import { expoOut } from "svelte/easing";
   import { fly } from "svelte/transition";
   import { fadeAndScale } from "../transitions/fade-and-scale";
 
@@ -34,19 +35,19 @@
 
 
 {#if show}
-  <span in:fly={{duration: 800, x: -150, delay: 300}} out:fly={{duration: 800, x: -150}} class="block">
+  <span in:fly={{duration: 700, x: -150, delay: 200, easing: expoOut}} out:fly={{duration: 400, x: -150}} class="block">
     <BgDecoration posTop="0" posLeft="0" width="25vw" height="25vw" rotate="45deg" translateY="-55%"
-                  translateX="0%"/>
+                  translateX="0%" />
   </span>
-  <span in:fly={{duration: 800, x: 150, delay: 300}} out:fly={{duration: 800, x: 150}}
+  <span in:fly={{duration: 700, x: 150, delay: 200, easing: expoOut}} out:fly={{duration: 400, x: 150}}
         class="block absolute bottom-0 right-0">
     <BgDecoration posBottom="0" posRight="0" width="40vw" height="40vw" rotate="-135deg" translateY="60%"
-                  translateX={"0%"}/>
+                  translateX={"0%"} />
   </span>
 
   <section class="h-screen flex flex-col justify-center"
-           in:fadeAndScale={{ duration: 800, invert: true, maxScale: 2}}
-           out:fadeAndScale={{ duration: 600, delay: 300, inverted: true, maxScale: 1.4 }}
+           in:fadeAndScale={{ duration: 600, invert: true, maxScale: 2}}
+           out:fadeAndScale={{ duration: 400, delay: 0, inverted: true, maxScale: 1.4 }}
            on:outroend={() => setAnimationState(false)}>
     <GradientText className="w-max mx-auto text-6xl text-center mb-8" type="h1">
       <span class="font-poppins-bold">Ro</span>
