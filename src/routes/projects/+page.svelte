@@ -5,7 +5,7 @@
   import AnimationFragment from "@components/svelte/AnimationFragment.svelte";
   import { onMount } from "svelte";
   import SvelteMarkdown from "svelte-markdown";
-  import { fly } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
   import { getCurrentBreakPoint } from "../../utils/tailwind-helper";
   import { type Project, projects } from "./projects";
   import ProjectThumbnail from "./ProjectThumnail.svelte";
@@ -13,6 +13,8 @@
   let selectedProject: Project | null = projects[0];
   let breadCrumbContainer: HTMLDivElement | null = null;
   let projectsMobileContainer: HTMLDivElement | null = null;
+
+  let visible = true;
 
   onMount(() => {
     const breakPoint = getCurrentBreakPoint()[1];
@@ -45,23 +47,25 @@
   }
 </script>
 
-<AnimationFragment className="lg:overflow-y-hidden lg:h-screen flex flex-col">
+<AnimationFragment className="lg:overflow-y-hidden lg:h-screen flex flex-col" visible={visible}>
   <div bind:this={breadCrumbContainer}>
-    <Back links={[{name: 'Back', href: '/'}]} on:navigate={(e) => goto(e.detail)} />
+    <Back links={[{name: 'Back', href: '/'}]} on:navigate={() => (visible = false)} />
   </div>
   <!-- BG Decorations -->
   <div class="absolute top-0 left-0 w-screen h-screen -z-10">
     <div class="block absolute top-1/2 left-0"
-         in:fly={{x: -1000, duration: 1000}}
-         out:fly={{x: -1000, duration: 1000}}>
+         in:fly={{x: -250, duration: 500}}
+         out:fly={{x: -250, duration: 500, delay: 300}}>
       <BgDecoration height="100vh" posLeft="0"
                     posTop="50%" rotate="45deg"
                     translateX="-55%" translateY="-50%"
                     width="100vh" />
     </div>
     <div class="block absolute bottom-0 right-0"
-         in:fly={{x: 1000, duration: 1000}}
-         out:fly={{x: 1000, duration: 1000}}>
+         in:fly={{x: 250, duration: 500}}
+         on:outroend={() => goto('/')}
+         out:fly={{x: 250, duration: 500, delay: 300}}>
+      >
       <BgDecoration height="15vh" posBottom="0"
                     posRight="0" rotate="-135deg"
                     translateX="-50%" translateY="-50%"
@@ -69,7 +73,9 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-5 flex-1 md:px-4">
+  <div class="grid grid-cols-1 lg:grid-cols-5 flex-1 md:px-4"
+       in:fade={{ duration: 300, delay: 300 }}
+       out:fade={{ duration: 300, delay: 0 }}>
     <div bind:this={projectsMobileContainer}
          class="flex flex-row overflow-x-scroll lg:flex-col gap-4 items-center snap-x snap-mandatory py-4
                 lg:py-0 lg:gap-8 lg:mx-4 lg:mx-0 lg:justify-center lg:col-span-2"
