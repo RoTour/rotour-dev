@@ -37,7 +37,7 @@ export const projects: Project[] = [
 			'Platform to manage a large number of projects simultaneously, for schools / incubators.\n\n' +
 			'The application should allow users to propose projects or apply to existing projects.\n\n' +
 			'An advanced administrator space will allow organizers to have an overview of projects and to manage their events in the best possible way.\n\n' +
-			'**Stack**: SvelteKit, Supabase, Typescript, Postgres, Docker, DroneCI' +
+			'**Stack**: SvelteKit, Supabase, Typescript, Postgres, Docker, DroneCI\n\n' +
 			'**Status**: In development',
 		image: '/images/spm-logo.svg',
 		color: 'white',

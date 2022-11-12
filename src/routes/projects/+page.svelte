@@ -18,8 +18,8 @@
 
   onMount(() => {
     const breakPoint = getCurrentBreakPoint()[1];
-    if (breakPoint === "sm" || breakPoint === "md") return;
-    document.body.style.overflow = "hidden";
+    console.log(breakPoint);
+    document.body.style.overflow = (breakPoint === "sm" || breakPoint === "md") ? "scroll" : "hidden";
     console.log("projectsMobileContainer", projectsMobileContainer);
   });
 
@@ -65,7 +65,7 @@
          in:fly={{x: 250, duration: 500}}
          on:outroend={() => goto('/')}
          out:fly={{x: 250, duration: 500, delay: 300}}>
-      >
+
       <BgDecoration height="15vh" posBottom="0"
                     posRight="0" rotate="-135deg"
                     translateX="-50%" translateY="-50%"
@@ -94,7 +94,7 @@
     </div>
     <div class="flex flex-col gap-4 justify-center prose lg:col-span-3 p-4">
       {#if selectedProject}
-        <h1 class="font-poppins-bold text-6xl mb-4">{selectedProject.title}</h1>
+        <h1 class="font-poppins-bold text-6xl mt-4 lg:mt-0 mb-0 lg:mb-4">{selectedProject.title}</h1>
         <div class="[&>p]:text-lg [&>p]:font-poppins-medium [&_strong]:font-poppins-bold">
           <SvelteMarkdown source={selectedProject.description} />
         </div>
