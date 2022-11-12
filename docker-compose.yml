@@ -10,8 +10,8 @@ services:
   #    volumes:
   #      - pocketbase-data:/pb_data
 
-  docker-labs-user-client:
-    container_name: docker-labs-user-client
+  rotour-dev:
+    container_name: rotour-dev-client
     build:
       context: .
       dockerfile: Dockerfile

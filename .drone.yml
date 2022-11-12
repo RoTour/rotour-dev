@@ -30,10 +30,7 @@ steps:
         from_secret: discord_webhook_id
       webhook_token:
         from_secret: discord_webhook_token
-      message: >
-        Une nouvelle version de https://rotour.dev est disponible !
-        Version {{build.number}}
-        Info: {{commit.message}}
+      message: "Une nouvelle version de https://rotour.dev est disponible !\nVersion {{build.number}}\nInfo: {{commit.message}}"
 
 
 volumes:
