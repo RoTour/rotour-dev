@@ -1,0 +1,18 @@
+<svg width="110" height="125" viewBox="0 0 110 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="sqlearn 1" clip-path="url(#clip0_244_17)">
+        <path id="Vector"
+              d="M110 17.8572V29.0178C110 38.8533 85.3647 46.875 55 46.875C24.6353 46.875 0 38.8533 0 29.0178V17.8572C0 8.02173 24.6353 0 55 0C85.3647 0 110 8.02173 110 17.8572ZM110 42.9688V68.0803C110 77.9158 85.3647 85.9375 55 85.9375C24.6353 85.9375 0 77.9158 0 68.0803V42.9688C11.8164 51.0603 33.4439 54.8271 55 54.8271C76.5561 54.8271 98.1833 51.0603 110 42.9688ZM110 82.0312V107.143C110 116.978 85.3647 125 55 125C24.6353 125 0 116.978 0 107.143V82.0312C11.8164 90.1228 33.4439 93.8896 55 93.8896C76.5561 93.8896 98.1833 90.1228 110 82.0312Z"
+              fill="url(#paint0_linear_244_17)"/>
+    </g>
+    <defs>
+        <linearGradient id="paint0_linear_244_17" x1="7.73437" y1="101.807" x2="103.612" y2="49.5913"
+                        gradientUnits="userSpaceOnUse">
+            <stop stop-color="#630086"/>
+            <stop offset="0.4375" stop-color="#AB00E8"/>
+            <stop offset="1" stop-color="#00FCED"/>
+        </linearGradient>
+        <clipPath id="clip0_244_17">
+            <rect width="110" height="125" fill="white"/>
+        </clipPath>
+    </defs>
+</svg>
