@@ -17,7 +17,8 @@
 
   // Desktop: parallax effect
   let initialMousePosition: { x: number, y: number } | null = null;
-  let blockTranslate = "";
+  let projectsThumbnailsTranslate = "";
+  let projectDescriptionTranslate = "";
   let bgTranslate = "";
 
   onMount(() => {
@@ -34,11 +35,14 @@
       scrollToProject(index);
       return;
     }
-    selectedProject = project;
+    nextProjectToSelect = projects.indexOf(project) ?? 0;
+    if (nextProjectToSelect !== projects.indexOf(selectedProject)) selectedProject = null;
   };
 
   let marginEl: DOMRect;
   let card: DOMRect;
+
+  let nextProjectToSelect = 0;
 
   const scrollToProject = (index: number) => {
     if (!marginEl || !card) [marginEl, card] = getBlocksDimensions();
@@ -48,7 +52,6 @@
     console.log("scrollDest", scrollDest);
     console.log("marginEl", marginEl, "card", card);
     projectsMobileContainer?.scrollTo({
-      // left: index * card.width + card.width / 2,
       left: scrollDest,
       behavior: "smooth"
     });
@@ -57,8 +60,9 @@
   const moveBlock = (e: MouseEvent) => {
     if (!initialMousePosition) initialMousePosition = { x: e.clientX, y: e.clientY };
     const x = (e.clientX - initialMousePosition.x) / 16;
-    const y = (e.clientY - initialMousePosition.y) / 9;
-    blockTranslate = `translate(${ x * .9 }px, ${ y * .9 }px)`;
+    const y = (e.clientY - initialMousePosition.y) / 10;
+    projectsThumbnailsTranslate = `translate(${ x * .9 }px, ${ y * .9 }px)`;
+    projectDescriptionTranslate = `translate(${ x * .5 }px, ${ y * .5 }px)`;
     bgTranslate = `translate(${ -x * .3 }px, ${ -y * .3 }px)`;
   };
 
@@ -114,12 +118,12 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-5 flex-1 md:px-4 relative z-10"
-       style="transform: {blockTranslate}"
        in:fade={{ duration: 300, delay: 300 }}
        out:fade={{ duration: 300, delay: 0 }}>
     <div bind:this={projectsMobileContainer}
          class="flex flex-row overflow-x-scroll md:flex-col gap-4 items-center snap-x snap-mandatory py-4
                 md:py-0 md:gap-8 md:mx-4 md:mx-0 md:justify-center md:mt-4 md:col-span-2"
+         style="transform: {projectsThumbnailsTranslate}"
     >
       <div class="snap-center h-[15vh] aspect-[8/9] lg:hidden"></div>
       {#each projects as project}
@@ -132,11 +136,15 @@
       {/each}
       <div class="snap-center h-[15vh] aspect-[8/9] md:hidden"></div>
     </div>
-    <div class="flex flex-col gap-4 justify-center prose md:col-span-3 p-4">
+    <div class="flex flex-col gap-4 justify-center prose md:col-span-3 p-4"
+         style="transform: {projectDescriptionTranslate}">
       {#if selectedProject}
-        <h1 class="font-poppins-bold text-6xl mt-4 md:mt-0 mb-0 md:mb-4">{selectedProject.title}</h1>
-        <div class="[&>p]:text-lg [&>p]:font-poppins-medium [&_strong]:font-poppins-bold">
-          <SvelteMarkdown source={selectedProject.description} />
+        <div transition:fly={{x: 500, duration: 300}}
+             on:outroend={() => selectedProject = projects[nextProjectToSelect]}>
+          <h1 class="font-poppins-bold text-6xl mt-4 md:mt-0 mb-0 md:mb-4">{selectedProject.title}</h1>
+          <div class="[&>p]:text-lg [&>p]:font-poppins-medium [&_strong]:font-poppins-bold">
+            <SvelteMarkdown source={selectedProject.description} />
+          </div>
         </div>
       {/if}
     </div>
