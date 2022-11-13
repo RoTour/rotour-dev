@@ -56,9 +56,9 @@
     </GradientText>
 
     <div class="w-full p-4 md:w-1/2 lg:w-1/3 mx-auto grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-4">
-      <SecondaryBtn onClick={() => animateExit('/projects')}>(🔨WIP) Projects</SecondaryBtn>
+      <SecondaryBtn onClick={() => animateExit('/projects')}>🧳 Projects</SecondaryBtn>
+      <SecondaryBtn onClick={() => animateExit('/labs')}>🧪 Labs</SecondaryBtn>
       <SecondaryBtn onClick={() => animateExit('/components')}>(🔨WIP) Components</SecondaryBtn>
-      <SecondaryBtn onClick={() => animateExit('/labs')}>(🔨WIP) Labs</SecondaryBtn>
       <SecondaryBtn onClick={() => animateExit('/testing')}>(🔨WIP) Testing</SecondaryBtn>
     </div>
   </section>

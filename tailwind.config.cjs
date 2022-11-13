@@ -27,7 +27,9 @@ module.exports = {
       animation: {
         "arrow": "arrow-anim 1s cubic-bezier(.1,0,.19,1) infinite",
         "arrow-fixed": "arrow-fixed-anim 1s cubic-bezier(.1,0,.19,1) infinite",
-        "boop-left": "boop-left 0.4s cubic-bezier(.1,0,.19,1)"
+        "boop-left": "boop-left 0.4s cubic-bezier(.1,0,.19,1)",
+        "project-card-selected-hover": "project-card-selected-hover .4s linear forwards",
+        "project-card-hover": "project-card-hover .4s linear forwards"
       },
       keyframes: {
         "arrow-anim": {
@@ -54,12 +56,20 @@ module.exports = {
           }
         },
         "boop-left": {
-          "50%": {
-            transform: "translateX(-10%)"
-          },
-          "100%": {
-            transform: "translateX(0)"
-          }
+          "50%": { transform: "translateX(-10%)" },
+          "100%": { transform: "translateX(0)" }
+        },
+        "project-card-selected-hover": {
+          "0%": { transform: "translateX(1rem) scale(1.1)" },
+          "20%": { transform: "translateX(1rem) scale(1.2) rotate(-5deg)" },
+          "40%": { transform: "translateX(1rem) scale(1.1875) rotate(0)" },
+          "100%": { transform: "translateX(1rem) scale(1.15) rotate(0)" }
+        },
+        "project-card-hover": {
+          "0%": { transform: "translateX(-1rem) scale(1)" },
+          "20%": { transform: "translateX(-1rem) scale(1.1) rotate(-5deg)" },
+          "40%": { transform: "translateX(-1rem) scale(1.0875) rotate(0)" },
+          "100%": { transform: "translateX(-1rem) scale(1.05) rotate(0)" }
         }
       }
     }

@@ -15,3 +15,8 @@ export const getCurrentBreakPoint = (): TailwindBreakpoint => {
 	}
 	return tailwindBreakPoints[tailwindBreakPoints.length - 1];
 };
+
+export const isMobile = (): boolean => {
+	const currentBreakPoint = getCurrentBreakPoint();
+	return currentBreakPoint[1] === 'sm' || currentBreakPoint[1] === 'md';
+};
