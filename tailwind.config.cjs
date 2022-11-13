@@ -29,7 +29,8 @@ module.exports = {
         "arrow-fixed": "arrow-fixed-anim 1s cubic-bezier(.1,0,.19,1) infinite",
         "boop-left": "boop-left 0.4s cubic-bezier(.1,0,.19,1)",
         "project-card-selected-hover": "project-card-selected-hover .4s linear forwards",
-        "project-card-hover": "project-card-hover .4s linear forwards"
+        "project-card-hover": "project-card-hover .4s linear forwards",
+        "moving-bg": "moving-bg 3s linear infinite"
       },
       keyframes: {
         "arrow-anim": {
@@ -70,6 +71,10 @@ module.exports = {
           "20%": { transform: "translateX(-1rem) scale(1.1) rotate(-5deg)" },
           "40%": { transform: "translateX(-1rem) scale(1.0875) rotate(0)" },
           "100%": { transform: "translateX(-1rem) scale(1.05) rotate(0)" }
+        },
+        "moving-bg": {
+          "from": { backgroundPosition: "0% center" },
+          "to": { backgroundPosition: "-200% center" }
         }
       }
     }
