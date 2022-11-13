@@ -4,7 +4,7 @@
   import SecondaryBtn from "@components/buttons/SecondaryBtn.svelte";
   import GradientText from "@components/text/GradientText.svelte";
   import { onMount } from "svelte";
-  import { elasticOut, expoOut } from "svelte/easing";
+  import { backIn, elasticOut, expoOut } from "svelte/easing";
   import { fly, scale } from "svelte/transition";
   import { fadeAndScale } from "../transitions/fade-and-scale";
 
@@ -13,6 +13,7 @@
   let redirect: string | null = null;
 
   const animateExit = (nextUrl: string) => {
+    console.log("animationRunning", animationRunning);
     if (animationRunning) return;
     show = false;
     setAnimationState(true);
@@ -45,10 +46,10 @@
                   translateX={"0%"} />
   </span>
 
-  <section class="h-screen flex flex-col justify-center"
-           on:outroend={() => setAnimationState(false)}>
+  <section class="h-screen flex flex-col justify-center">
     <div in:fadeAndScale={{ duration: 600, invert: true, maxScale: 2}}
-         out:fadeAndScale={{ duration: 400, delay: 0, inverted: true, maxScale: 1.4 }}>
+         out:fadeAndScale={{ duration: 400, delay: 400, inverted: true, maxScale: 1.4 }}
+         on:outroend={() => setAnimationState(false)}>
       <GradientText className="w-max mx-auto text-6xl text-center mb-8 animate-moving-bg bg-[length:200%]" type="h1"
                     gradientType="symmetric">
         <span class="font-poppins-bold">Ro</span>
@@ -57,16 +58,20 @@
       </GradientText>
     </div>
     <div class="w-full p-4 md:w-1/2 lg:w-1/3 mx-auto grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-4">
-      <div in:scale={{easing: elasticOut, duration: 1000, delay: 500}}>
+      <div in:scale={{easing: elasticOut, duration: 1000, delay: 500}}
+           out:scale={{easing: backIn, duration: 400, delay: 0}}>
         <SecondaryBtn onClick={() => animateExit('/projects')}>🧳 Projects</SecondaryBtn>
       </div>
-      <div in:scale={{easing: elasticOut, duration: 1000, delay: 600}}>
+      <div in:scale={{easing: elasticOut, duration: 1000, delay: 600}}
+           out:scale={{easing: backIn, duration: 400, delay: 100}}>
         <SecondaryBtn onClick={() => animateExit('/labs')}>🧪 Labs</SecondaryBtn>
       </div>
-      <div in:scale={{easing: elasticOut, duration: 1000, delay: 700}}>
+      <div in:scale={{easing: elasticOut, duration: 1000, delay: 700}}
+           out:scale={{easing: backIn, duration: 400, delay: 200}}>
         <SecondaryBtn onClick={() => animateExit('/components')}>(🔨WIP) Components</SecondaryBtn>
       </div>
-      <div in:scale={{easing: elasticOut, duration: 1000, delay: 800}}>
+      <div in:scale={{easing: elasticOut, duration: 1000, delay: 800}}
+           out:scale={{easing: backIn, duration: 400, delay: 300}}>
         <SecondaryBtn onClick={() => animateExit('/testing')}>(🔨WIP) Testing</SecondaryBtn>
       </div>
     </div>
