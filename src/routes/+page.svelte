@@ -7,29 +7,41 @@
   import { backIn, elasticOut, expoOut } from "svelte/easing";
   import { fly, scale } from "svelte/transition";
   import { fadeAndScale } from "../transitions/fade-and-scale";
+  import { isMobile } from "../utils/tailwind-helper";
 
   let show = false;
   let animationRunning = false;
   let redirect: string | null = null;
 
+  let initialMousePosition: { x: number, y: number } | null = null;
+  let blockTranslate = "";
+
   const animateExit = (nextUrl: string) => {
-    console.log("animationRunning", animationRunning);
     if (animationRunning) return;
     show = false;
     setAnimationState(true);
     redirect = nextUrl;
   };
 
-  onMount(() => {
-    document.body.style.overflow = "hidden";
-    show = true;
-  });
+  const moveBlock = (e: MouseEvent) => {
+    if (!initialMousePosition) initialMousePosition = { x: e.clientX, y: e.clientY + window.innerHeight * .1 };
+    const x = (e.clientX - initialMousePosition.x) / 16;
+    const y = (e.clientY - initialMousePosition.y) / 9;
+    blockTranslate = `translate(${ x * .5 }px, ${ y * .5 }px)`;
+  };
 
   const setAnimationState = (state: boolean) => {
     animationRunning = state;
   };
 
+  onMount(() => {
+    document.body.style.overflow = "hidden";
+    if (!isMobile()) document.body.addEventListener("mousemove", moveBlock);
+    show = true;
+  });
+
   $: if (redirect && !animationRunning) {
+    document.body.removeEventListener("mousemove", moveBlock);
     goto(redirect);
   }
 </script>
@@ -46,7 +58,8 @@
                   translateX={"0%"} />
   </span>
 
-  <section class="h-screen flex flex-col justify-center">
+  <section class="h-screen flex flex-col justify-center"
+           style="{blockTranslate && `transform: ${blockTranslate}`}">
     <div in:fadeAndScale={{ duration: 600, invert: true, maxScale: 2}}
          out:fadeAndScale={{ duration: 400, delay: 400, inverted: true, maxScale: 1.4 }}
          on:outroend={() => setAnimationState(false)}>
