@@ -49,8 +49,6 @@
     const gap = card.x - marginEl.width;
     const offset = (card.width + gap) - window.innerWidth / 2;
     const scrollDest = offset + index * (card.width + gap);
-    console.log("scrollDest", scrollDest);
-    console.log("marginEl", marginEl, "card", card);
     projectsMobileContainer?.scrollTo({
       left: scrollDest,
       behavior: "smooth"
@@ -58,11 +56,11 @@
   };
 
   const moveBlock = (e: MouseEvent) => {
-    if (!initialMousePosition) initialMousePosition = { x: e.clientX, y: e.clientY };
+    if (!initialMousePosition) initialMousePosition = { x: e.clientX, y: e.clientY + window.innerHeight * .1 };
     const x = (e.clientX - initialMousePosition.x) / 16;
     const y = (e.clientY - initialMousePosition.y) / 10;
-    projectsThumbnailsTranslate = `translate(${ x * .9 }px, ${ y * .9 }px)`;
-    projectDescriptionTranslate = `translate(${ x * .5 }px, ${ y * .5 }px)`;
+    projectsThumbnailsTranslate = `translate(${ x * .5 }px, ${ y * .5 }px)`;
+    projectDescriptionTranslate = `translate(${ x * .9 }px, ${ y * .9 }px)`;
     bgTranslate = `translate(${ -x * .3 }px, ${ -y * .3 }px)`;
   };
 
@@ -85,7 +83,6 @@
       const scroll = (e.target as HTMLDivElement).scrollLeft;
       const cardIndex = Math.floor((scroll / (cardWith + 1 / 2 * margin)) + .5);
       selectedProject = projects[cardIndex];
-      console.log("scroll", scroll, "cardIndex", cardIndex);
     });
   }
 
@@ -142,7 +139,7 @@
         <div transition:fly={{x: 500, duration: 300}}
              on:outroend={() => selectedProject = projects[nextProjectToSelect]}>
           <h1 class="font-poppins-bold text-6xl mt-4 md:mt-0 mb-0 md:mb-4">{selectedProject.title}</h1>
-          <div class="[&>p]:text-lg [&>p]:font-poppins-medium [&_strong]:font-poppins-bold">
+          <div class="[&>p]:text-lg [&>p]:font-poppins-medium [&_strong]:font-poppins-bold text-justify">
             <SvelteMarkdown source={selectedProject.description} />
           </div>
         </div>
