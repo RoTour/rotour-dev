@@ -26,13 +26,18 @@
     document.body.style.overflow = mobile ? "scroll" : "hidden";
     if (!mobile) document.body.addEventListener("mousemove", moveBlock);
     if (mobile) scrollToProject(0);
+    const [marginEl, card] = getBlocksDimensions();
+    placeholderWidth = window?.innerWidth / 2 - (card?.width ?? 0) / 2 - (card.x - marginEl.width);
   });
 
   const onClickProject = (project: Project) => {
+    console.log(isMobile());
     if (isMobile()) {
       const index = projects.indexOf(project);
+      console.log("new index", index);
       console.log(project, index);
       scrollToProject(index);
+      selectedProject = project;
       return;
     }
     nextProjectToSelect = projects.indexOf(project) ?? 0;
@@ -41,6 +46,7 @@
 
   let marginEl: DOMRect;
   let card: DOMRect;
+  let placeholderWidth = 0;
 
   let nextProjectToSelect = 0;
 
@@ -49,6 +55,7 @@
     const gap = card.x - marginEl.width;
     const offset = (card.width + gap) - window.innerWidth / 2;
     const scrollDest = offset + index * (card.width + gap);
+    console.log("scroll to", scrollDest);
     projectsMobileContainer?.scrollTo({
       left: scrollDest,
       behavior: "smooth"
@@ -64,6 +71,11 @@
     bgTranslate = `translate(${ -x * .3 }px, ${ -y * .3 }px)`;
   };
 
+  const onDesktopTransitionEnd = () => {
+    if (isMobile()) return;
+    selectedProject = projects[nextProjectToSelect];
+  };
+
   const onExitPage = () => {
     document.body.removeEventListener("mousemove", moveBlock);
     goto("/");
@@ -76,7 +88,8 @@
 
   // Auto select project on mobile on scroll
   $: if (projectsMobileContainer) {
-    const [marginEl, card] = [...(projectsMobileContainer?.getElementsByTagName("div")) || []].map(it => it.getBoundingClientRect());
+    const [marginEl, card] = getBlocksDimensions();
+    console.log({ marginEl, card });
     const margin = card.x - marginEl.width;
     const cardWith = card.width;
     projectsMobileContainer?.addEventListener("scroll", (e) => {
@@ -85,6 +98,8 @@
       selectedProject = projects[cardIndex];
     });
   }
+
+  $: console.log("placeholderWidth", placeholderWidth);
 
 </script>
 
@@ -122,7 +137,7 @@
                 md:py-0 md:gap-8 md:mx-4 md:mx-0 md:justify-center md:mt-4 md:col-span-2"
          style="transform: {projectsThumbnailsTranslate}"
     >
-      <div class="snap-center h-[15vh] aspect-[8/9] lg:hidden"></div>
+      <div class="snap-center h-[15vh] md:hidden" style="min-width: {placeholderWidth}px"></div>
       {#each projects as project}
         <div class="h-[15vh] aspect-video cursor-pointer transition-all duration-300 snap-center
                     {selectedProject === project ? 'md:scale-110 md:translate-x-4 md:hover:animate-project-card-selected-hover' : 'md:opacity-50 md:-translate-x-4 md:hover:animate-project-card-hover'}"
@@ -131,13 +146,13 @@
           <ProjectThumbnail imageLink={project.image} bgColor={project.color} />
         </div>
       {/each}
-      <div class="snap-center h-[15vh] aspect-[8/9] md:hidden"></div>
+      <div class="snap-center h-[15vh] md:hidden" style="min-width: {placeholderWidth}px"></div>
     </div>
     <div class="flex flex-col gap-4 justify-center prose md:col-span-3 p-4"
          style="transform: {projectDescriptionTranslate}">
       {#if selectedProject}
         <div transition:fly={{x: 500, duration: 300}}
-             on:outroend={() => selectedProject = projects[nextProjectToSelect]}>
+             on:outroend={onDesktopTransitionEnd}>
           <h1 class="font-poppins-bold text-6xl mt-4 md:mt-0 mb-0 md:mb-4">{selectedProject.title}</h1>
           <div class="[&>p]:text-lg [&>p]:font-poppins-medium [&_strong]:font-poppins-bold text-justify">
             <SvelteMarkdown source={selectedProject.description} />
