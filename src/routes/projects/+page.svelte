@@ -6,7 +6,7 @@
   import { onMount } from "svelte";
   import SvelteMarkdown from "svelte-markdown";
   import { fade, fly } from "svelte/transition";
-  import { isMobile } from "../../utils/tailwind-helper";
+  import { getDeviceType } from "../../utils/tailwind-helper";
   import { type Project, projects } from "./projects";
   import ProjectThumbnail from "./ProjectThumnail.svelte";
 
@@ -21,9 +21,12 @@
   let projectDescriptionTranslate = "";
   let bgTranslate = "";
 
+  let preventWiggle = false;
+
   onMount(() => {
-    const mobile = isMobile();
+    const mobile = (getDeviceType() !== "desktop");
     document.body.style.overflow = mobile ? "scroll" : "hidden";
+    console.log("user agent: ", navigator.userAgent, getDeviceType());
     if (!mobile) document.body.addEventListener("mousemove", moveBlock);
     if (mobile) scrollToProject(0);
     const [marginEl, card] = getBlocksDimensions();
@@ -31,31 +34,30 @@
   });
 
   const onClickProject = (project: Project) => {
-    console.log(isMobile());
-    if (isMobile()) {
+    const onMobile = getDeviceType() !== "desktop";
+    if (onMobile) {
       const index = projects.indexOf(project);
-      console.log("new index", index);
-      console.log(project, index);
       scrollToProject(index);
-      selectedProject = project;
+      // selectedProject = project;
       return;
     }
-    nextProjectToSelect = projects.indexOf(project) ?? 0;
-    if (nextProjectToSelect !== projects.indexOf(selectedProject)) selectedProject = null;
+    preventWiggle = true;
+    nextProjectIndexToSelect = projects.indexOf(project) ?? 0;
+    if (nextProjectIndexToSelect !== projects.indexOf(selectedProject)) selectedProject = null;
   };
 
+  // Store initial values
   let marginEl: DOMRect;
   let card: DOMRect;
   let placeholderWidth = 0;
 
-  let nextProjectToSelect = 0;
+  let nextProjectIndexToSelect = 0;
 
   const scrollToProject = (index: number) => {
     if (!marginEl || !card) [marginEl, card] = getBlocksDimensions();
     const gap = card.x - marginEl.width;
     const offset = (card.width + gap) - window.innerWidth / 2;
     const scrollDest = offset + index * (card.width + gap);
-    console.log("scroll to", scrollDest);
     projectsMobileContainer?.scrollTo({
       left: scrollDest,
       behavior: "smooth"
@@ -65,15 +67,15 @@
   const moveBlock = (e: MouseEvent) => {
     if (!initialMousePosition) initialMousePosition = { x: e.clientX, y: e.clientY + window.innerHeight * .1 };
     const x = (e.clientX - initialMousePosition.x) / 16;
-    const y = (e.clientY - initialMousePosition.y) / 10;
+    const y = (e.clientY - initialMousePosition.y) / 12;
     projectsThumbnailsTranslate = `translate(${ x * .5 }px, ${ y * .5 }px)`;
     projectDescriptionTranslate = `translate(${ x * .9 }px, ${ y * .9 }px)`;
     bgTranslate = `translate(${ -x * .3 }px, ${ -y * .3 }px)`;
   };
 
   const onDesktopTransitionEnd = () => {
-    if (isMobile()) return;
-    selectedProject = projects[nextProjectToSelect];
+    if ((getDeviceType() !== "desktop")) return;
+    selectedProject = projects[nextProjectIndexToSelect];
   };
 
   const onExitPage = () => {
@@ -89,7 +91,6 @@
   // Auto select project on mobile on scroll
   $: if (projectsMobileContainer) {
     const [marginEl, card] = getBlocksDimensions();
-    console.log({ marginEl, card });
     const margin = card.x - marginEl.width;
     const cardWith = card.width;
     projectsMobileContainer?.addEventListener("scroll", (e) => {
@@ -99,11 +100,9 @@
     });
   }
 
-  $: console.log("placeholderWidth", placeholderWidth);
-
 </script>
 
-<AnimationFragment className="md:overflow-y-hidden md:h-screen flex flex-col" visible={visible}>
+<AnimationFragment className="lg:overflow-y-hidden lg:h-screen flex flex-col" visible={visible}>
   <div class="relative z-20">
     <Back links={[{name: 'Back', href: '/'}]} on:navigate={() => (visible = false)} />
   </div>
@@ -129,31 +128,32 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-5 flex-1 md:px-4 relative z-10"
+  <div class="grid grid-cols-1 lg:grid-cols-5 flex-1 lg:px-4 relative z-10"
        in:fade={{ duration: 300, delay: 300 }}
        out:fade={{ duration: 300, delay: 0 }}>
     <div bind:this={projectsMobileContainer}
-         class="flex flex-row overflow-x-scroll md:flex-col gap-4 items-center snap-x snap-mandatory py-4
-                md:py-0 md:gap-8 md:mx-4 md:mx-0 md:justify-center md:mt-4 md:col-span-2"
+         class="flex flex-row overflow-x-scroll lg:flex-col gap-4 items-center snap-x snap-mandatory py-4
+                lg:py-0 lg:gap-8 lg:mx-4 lg:mx-0 lg:justify-center lg:mt-4 lg:col-span-2"
          style="transform: {projectsThumbnailsTranslate}"
     >
-      <div class="snap-center h-[15vh] md:hidden" style="min-width: {placeholderWidth}px"></div>
+      <div class="snap-center h-[15vh] lg:hidden" style="min-width: {placeholderWidth}px"></div>
       {#each projects as project}
         <div class="h-[15vh] aspect-video cursor-pointer transition-all duration-300 snap-center
-                    {selectedProject === project ? 'md:scale-110 md:translate-x-4 md:hover:animate-project-card-selected-hover' : 'md:opacity-50 md:-translate-x-4 md:hover:animate-project-card-hover'}"
+                    {selectedProject === project ? `lg:scale-110 lg:translate-x-4 ${!preventWiggle && 'lg:hover:animate-project-card-selected-hover'}` : 'lg:opacity-50 lg:-translate-x-4 lg:duration-200 lg:hover:translate-x-0'}"
+             on:mouseleave={() => (preventWiggle = false)}
              on:click={() => onClickProject(project)}
              on:keydown={() => onClickProject(project)}>
           <ProjectThumbnail imageLink={project.image} bgColor={project.color} />
         </div>
       {/each}
-      <div class="snap-center h-[15vh] md:hidden" style="min-width: {placeholderWidth}px"></div>
+      <div class="snap-center h-[15vh] lg:hidden" style="min-width: {placeholderWidth}px"></div>
     </div>
-    <div class="flex flex-col gap-4 justify-center prose md:col-span-3 p-4"
+    <div class="flex flex-col gap-4 justify-center prose lg:col-span-3 p-4"
          style="transform: {projectDescriptionTranslate}">
       {#if selectedProject}
         <div transition:fly={{x: 500, duration: 300}}
              on:outroend={onDesktopTransitionEnd}>
-          <h1 class="font-poppins-bold text-6xl mt-4 md:mt-0 mb-0 md:mb-4">{selectedProject.title}</h1>
+          <h1 class="font-poppins-bold text-6xl mt-4 lg:mt-0 mb-0 lg:mb-4">{selectedProject.title}</h1>
           <div class="[&>p]:text-lg [&>p]:font-poppins-medium [&_strong]:font-poppins-bold text-justify">
             <SvelteMarkdown source={selectedProject.description} />
           </div>

@@ -20,3 +20,18 @@ export const isMobile = (): boolean => {
 	const currentBreakPoint = getCurrentBreakPoint();
 	return currentBreakPoint[1] === 'sm' || currentBreakPoint[1] === 'md';
 };
+
+export const getDeviceType = () => {
+	const ua = navigator.userAgent;
+	if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+		return 'tablet';
+	}
+	if (
+		/Mobile|iP(hone|od)|Android|BlackBerry|IEMobile|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+			ua
+		)
+	) {
+		return 'mobile';
+	}
+	return 'desktop';
+};
