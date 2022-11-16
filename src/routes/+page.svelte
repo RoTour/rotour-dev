@@ -63,12 +63,16 @@
     <div in:fadeAndScale={{ duration: 600, invert: true, maxScale: 2}}
          out:fadeAndScale={{ duration: 400, delay: 400, inverted: true, maxScale: 1.4 }}
          on:outroend={() => setAnimationState(false)}>
-      <GradientText className="w-max mx-auto text-6xl text-center mb-8 animate-moving-bg bg-[length:200%]" type="h1"
-                    gradientType="symmetric">
-        <span class="font-poppins-bold">Ro</span>
-        <span class="font-poppins-bold text-black">::</span>
-        <span class="font-poppins-bold">Tour</span>
-      </GradientText>
+      <div class="w-min m-auto mb-8">
+        <GradientText className="w-max mx-auto text-6xl text-center animate-moving-bg bg-[length:200%]" type="h1"
+                      gradientType="symmetric">
+          <span class="font-poppins-bold">Ro</span>
+          <span class="font-poppins-bold text-black">::</span>
+          <span class="font-poppins-bold">Tour</span>
+        </GradientText>
+        <p class="whitespace-nowrap font-poppins-regular opacity-80 text-xl italic">Web Developer & Devops
+          enthusiast</p>
+      </div>
     </div>
     <div class="w-full p-4 md:w-1/2 lg:w-1/3 mx-auto grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-4">
       <div in:scale={{easing: elasticOut, duration: 1000, delay: 500}}
