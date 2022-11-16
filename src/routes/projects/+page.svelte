@@ -30,7 +30,15 @@
     if (!mobile) document.body.addEventListener("mousemove", moveBlock);
     if (mobile) scrollToProject(0);
     const [marginEl, card] = getBlocksDimensions();
-    placeholderWidth = window?.innerWidth / 2 - (card?.width ?? 0) / 2 - (card.x - marginEl.width);
+    placeholderWidth = document.body.clientWidth / 2 - (card?.width ?? 0) / 2 - (card.x - marginEl.width);
+    console.log({
+      placeholderWidth,
+      windowWidth: document.body.clientWidth,
+      cardWidth: card?.width,
+      cardX: card?.x,
+      marginElWidth: marginEl.width
+    });
+    console.log("placeholder width", placeholderWidth);
   });
 
   const onClickProject = (project: Project) => {
