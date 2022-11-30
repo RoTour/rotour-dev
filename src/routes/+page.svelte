@@ -85,11 +85,11 @@
       </div>
       <div in:scale={{easing: elasticOut, duration: 1000, delay: 700}}
            out:scale={{easing: backIn, duration: 400, delay: 200}}>
-        <SecondaryBtn onClick={() => animateExit('/components')}>(🔨WIP) Components</SecondaryBtn>
+        <SecondaryBtn onClick={() => animateExit('/about')}>(🔨WIP) About Me</SecondaryBtn>
       </div>
       <div in:scale={{easing: elasticOut, duration: 1000, delay: 800}}
            out:scale={{easing: backIn, duration: 400, delay: 300}}>
-        <SecondaryBtn onClick={() => animateExit('/testing')}>(🔨WIP) Testing</SecondaryBtn>
+        <SecondaryBtn disabled>Coming soon...</SecondaryBtn>
       </div>
     </div>
   </section>
