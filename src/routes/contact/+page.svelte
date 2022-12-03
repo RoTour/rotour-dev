@@ -53,7 +53,7 @@
       message: `From: ${ email }<br> ${ message }`,
       author: company
     };
-    fetch("http://localhost:29999/send", {
+    fetch("https://mail.rotour.dev/send", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: { "Content-Type": "application/json" }
