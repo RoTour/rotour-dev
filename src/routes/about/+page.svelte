@@ -81,7 +81,7 @@
             </li>
           {/each}
         </ul>
-        <div class="block lg:hidden">
+        <div class="block lg:hidden" transition:fade={{duration: 1000, easing: cubicOut}}>
           <MobileSkills skills={skills} />
         </div>
       </div>

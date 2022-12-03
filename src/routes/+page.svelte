@@ -75,6 +75,10 @@
       </div>
     </div>
     <div class="w-full p-4 md:w-1/2 lg:w-1/3 mx-auto grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-4">
+      <div in:scale={{easing: elasticOut, duration: 1000, delay: 700}}
+           out:scale={{easing: backIn, duration: 400, delay: 200}}>
+        <SecondaryBtn onClick={() => animateExit('/about')}>⭐️About Me</SecondaryBtn>
+      </div>
       <div in:scale={{easing: elasticOut, duration: 1000, delay: 500}}
            out:scale={{easing: backIn, duration: 400, delay: 0}}>
         <SecondaryBtn onClick={() => animateExit('/projects')}>🧳 Projects</SecondaryBtn>
@@ -82,10 +86,6 @@
       <div in:scale={{easing: elasticOut, duration: 1000, delay: 600}}
            out:scale={{easing: backIn, duration: 400, delay: 100}}>
         <SecondaryBtn onClick={() => animateExit('/labs')}>🧪 Labs</SecondaryBtn>
-      </div>
-      <div in:scale={{easing: elasticOut, duration: 1000, delay: 700}}
-           out:scale={{easing: backIn, duration: 400, delay: 200}}>
-        <SecondaryBtn onClick={() => animateExit('/about')}>(🔨WIP) About Me</SecondaryBtn>
       </div>
       <div in:scale={{easing: elasticOut, duration: 1000, delay: 800}}
            out:scale={{easing: backIn, duration: 400, delay: 300}}>
