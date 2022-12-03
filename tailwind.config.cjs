@@ -30,7 +30,10 @@ module.exports = {
         "boop-left": "boop-left 0.4s cubic-bezier(.1,0,.19,1)",
         "project-card-selected-hover": "project-card-selected-hover .4s linear forwards",
         "project-card-hover": "project-card-hover .1s linear forwards",
-        "moving-bg": "moving-bg 3s linear infinite"
+        "moving-bg": "moving-bg 3s linear infinite",
+        scaleZeroToOne: "scaleZeroToOne 0.6s infinite",
+        scaleOneToZero: "scaleOneToZero 0.6s infinite",
+        dotFadeOut: "dotFadeOut 0.6s infinite"
       },
       keyframes: {
         "arrow-anim": {
@@ -73,6 +76,18 @@ module.exports = {
         "moving-bg": {
           "from": { backgroundPosition: "0% center" },
           "to": { backgroundPosition: "-200% center" }
+        },
+        scaleZeroToOne: {
+          "0%": { transform: "scale(0)" },
+          "100%": { transform: "scale(1)" }
+        },
+        scaleOneToZero: {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(0)" }
+        },
+        dotFadeOut: {
+          "0%": { transform: "translate(0, 0)" },
+          "100%": { transform: "translate(24px, 0)" }
         }
       }
     }
