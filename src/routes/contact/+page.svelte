@@ -29,6 +29,9 @@
     if (!email) {
       errors.push("Email is required");
     }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.push("Email is invalid");
+    }
     if (!message) {
       errors.push("Message is required");
     }
@@ -50,7 +53,11 @@
       message: `From: ${ email }<br> ${ message }`,
       author: company
     };
-    fetch("https://mail.rotour.dev/send", { method: "POST", body: JSON.stringify(payload) })
+    fetch("http://localhost:29999/send", {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "application/json" }
+    })
       .then(() => {
         notification.set({ type: "success", message: "Message sent!" });
         goto("/");
