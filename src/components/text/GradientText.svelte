@@ -2,7 +2,7 @@
   export let className = "";
   export let type: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" = "h1";
   export let gradientType: "linear" | "symmetric" = "linear";
-  export let style: string;
+  export let style = "";
 </script>
 
 <svelte:element
