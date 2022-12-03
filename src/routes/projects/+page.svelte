@@ -51,7 +51,7 @@
     }
     preventWiggle = true;
     nextProjectIndexToSelect = projects.indexOf(project) ?? 0;
-    if (nextProjectIndexToSelect !== projects.indexOf(selectedProject)) selectedProject = null;
+    if (selectedProject && nextProjectIndexToSelect !== projects.indexOf(selectedProject)) selectedProject = null;
   };
 
   // Store initial values
@@ -136,7 +136,7 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-5 flex-1 lg:px-4 relative z-10"
+  <div class="grid grid-cols-1 lg:grid-cols-5 flex-1 lg:px-4 relative z-10 mt-12"
        in:fade={{ duration: 300, delay: 300 }}
        out:fade={{ duration: 300, delay: 0 }}>
     <div bind:this={projectsMobileContainer}

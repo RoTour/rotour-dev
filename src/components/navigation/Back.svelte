@@ -13,7 +13,7 @@
 </script>
 
 <div bind:clientHeight={height} class="flex w-full items-center bg-white md:bg-transparent fixed top-0 left-0">
-  <div class="bg-gradient-to-r from-primary via-primary to-secondary lg:bg-none h-12 w-full absolute top-0 left-0">
+  <div class="bg-gradient-to-r from-primary via-primary to-secondary md:bg-none h-12 w-full absolute top-0 left-0">
     {#each links as link, idx}
       <button on:click={() => onNavigate(link.href)}
               class="h-12 [&>svg]:h-4 flex gap-4 items-center ml-4 text-lg underline font-poppins-medium {className}">

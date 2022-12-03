@@ -122,7 +122,7 @@
   <div on:outroend={() => goto(destination)} transition:fade>
     <Back links={[{name: "Back", href: "/"}]} on:navigate={onBackBtnClicked} />
     <div class="
-    flex flex-col gap-4 w-screen lg:mx-auto select-none mt-4 lg:mt-6
+    flex flex-col gap-4 w-screen lg:mx-auto select-none mt-16 lg:mt-[4.5rem]
     [&_h2>*]:font-poppins-bold [&_h2>*]:text-5xl
   " id="moving-block" style={`transform: ${blockTranslate.value}`}>
 
