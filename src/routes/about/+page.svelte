@@ -17,6 +17,7 @@
   import { onMount } from "svelte";
   import { cubicOut, elasticOut } from "svelte/easing";
   import { fade, fly, scale } from "svelte/transition";
+  import { getDeviceType } from "../../utils/tailwind-helper";
   import AboutMeData from "./data.ts";
   import MobileSkills from "./MobileSkills.svelte";
   import SkillElement from "./Skill.svelte";
@@ -50,6 +51,8 @@
 
   onMount(() => {
     visible = true;
+    const mobile = (getDeviceType() !== "desktop");
+    document.body.style.overflow = mobile ? "scroll" : "hidden";
   });
 
   const onBackPressed = (e: { detail: string }) => {
