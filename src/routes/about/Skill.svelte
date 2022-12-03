@@ -6,11 +6,9 @@
   let randomBgPos = Math.floor(Math.random() * 3) + 1;
 </script>
 
-<li class="absolute {skill?.classes ?? ''}" style="{skill?.style ?? ''}">
-  <GradientText className="font-poppins-bold animate-moving-bg bg-[length:200%]"
-                gradientType="symmetric"
-                style="animation-duration: {randomBgPos}s"
-                type="p">
-    {skill?.name}
-  </GradientText>
-</li>
+<GradientText className="font-poppins-bold animate-moving-bg bg-[length:200%]"
+              gradientType="symmetric"
+              style="animation-duration: {randomBgPos}s"
+              type="p">
+  {skill?.name}
+</GradientText>
