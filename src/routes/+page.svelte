@@ -65,13 +65,14 @@
          out:fadeAndScale={{ duration: 400, delay: 400, inverted: true, maxScale: 1.4 }}
          on:outroend={() => setAnimationState(false)}>
       <div class="w-min m-auto mb-8">
-        <GradientText className="w-max mx-auto text-6xl text-center animate-moving-bg bg-[length:200%]" type="h1"
+        <GradientText className="w-max mx-auto text-4xl lg:text-6xl text-center animate-moving-bg bg-[length:200%]"
+                      type="h1"
                       gradientType="symmetric">
           <span class="font-poppins-bold">Ro</span>
           <span class="font-poppins-bold text-black">::</span>
           <span class="font-poppins-bold">Tour</span>
         </GradientText>
-        <p class="whitespace-nowrap font-poppins-regular opacity-80 text-xl italic">Web Developer & Devops
+        <p class="whitespace-nowrap font-poppins-regular opacity-80 text-sm lg:text-xl italic">Web Developer & Devops
           enthusiast</p>
       </div>
     </div>

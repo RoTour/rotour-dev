@@ -124,7 +124,7 @@
     <Back links={[{name: "Back", href: "/"}]} on:navigate={onBackBtnClicked} />
     <div class="
     flex flex-col gap-4 w-screen lg:mx-auto select-none mt-16 lg:mt-[4.5rem]
-    [&_h2>*]:font-poppins-bold [&_h2>*]:text-5xl
+    [&_h2>*]:font-poppins-bold [&_h2>*]:text-xl [&_h2>*]:md:text-5xl
   " id="moving-block" style={`transform: ${blockTranslate.value}`}>
 
       {#each categories.filter((it) => !selectedCategory || it.name === selectedCategory.name) as {
