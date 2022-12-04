@@ -35,7 +35,7 @@
     component: WebDev,
     contentType: "css"
   }, {
-    name: "Docker Labs",
+    name: "Docker Labs (Available Soon)",
     component: DockerLabs,
     contentType: "docker"
   }];
@@ -97,6 +97,7 @@
   };
 
   const onCategorySelected = (category: Category) => {
+    if (category.name === "Docker Labs (Available Soon)") return;
     addTransitionEffect();
     removeMovingBlockListener();
     initialMousePosition = null;

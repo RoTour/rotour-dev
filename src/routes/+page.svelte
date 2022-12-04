@@ -1,6 +1,5 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { notification } from "$lib/notification.store";
   import BgDecoration from "@components/background/BgDecoration.svelte";
   import SecondaryBtn from "@components/buttons/SecondaryBtn.svelte";
   import GradientText from "@components/text/GradientText.svelte";
@@ -39,7 +38,6 @@
     document.body.style.overflow = "hidden";
     if (!isMobile()) document.body.addEventListener("mousemove", moveBlock);
     show = true;
-    notification.set({ type: "success", message: "You have successfully logged in!" });
   });
 
   $: if (redirect && !animationRunning) {
