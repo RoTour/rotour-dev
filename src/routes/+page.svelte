@@ -49,12 +49,12 @@
 
 {#if show}
   <div in:fly={{duration: 700, x: -150, delay: 200, easing: expoOut}} out:fly={{duration: 400, x: -150}}
-       class="block absolute top-0 left-o w-full h-full">
+       class="block absolute top-0 left-o w-full h-full -z-10">
     <BgDecoration posTop="0" posLeft="0" width="25vw" height="25vw" rotate="45deg" translateY="-55%"
                   translateX="0%" />
   </div>
   <div in:fly={{duration: 700, x: 150, delay: 200, easing: expoOut}} out:fly={{duration: 400, x: 150}}
-       class="block absolute bottom-0 right-0">
+       class="block absolute top-0 left-o w-full h-full -z-10">
     <BgDecoration posBottom="0" posRight="0" width="40vw" height="40vw" rotate="-135deg" translateY="60%"
                   translateX={"0%"} />
   </div>
