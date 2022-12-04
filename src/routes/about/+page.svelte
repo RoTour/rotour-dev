@@ -26,6 +26,10 @@
   let visible = false;
   let destination = "";
 
+  let initialMousePosition: { x: number, y: number } | null = null;
+  let mainBlockTranslate = "";
+  let bgTranslate = "";
+
   const formatTxt = (text: string) => {
     return text.replace(/\n/g, "<br/><br/>");
   };
@@ -53,6 +57,7 @@
     visible = true;
     const mobile = (getDeviceType() !== "desktop");
     document.body.style.overflow = mobile ? "scroll" : "hidden";
+    if (!mobile) document.body.addEventListener("mousemove", moveBlock);
   });
 
   const onBackPressed = (e: { detail: string }) => {
@@ -60,15 +65,24 @@
     visible = false;
     console.log("onBackPressed", e.detail, visible);
   };
+
+  const moveBlock = (e: MouseEvent) => {
+    if (!initialMousePosition) initialMousePosition = { x: e.clientX, y: e.clientY + window.innerHeight * .1 };
+    const x = (e.clientX - initialMousePosition.x) / 16;
+    const y = (e.clientY - initialMousePosition.y) / 12;
+    mainBlockTranslate = `translate(${ x * .5 }px, ${ y * .5 }px)`;
+    bgTranslate = `translate(${ -x * .3 }px, ${ -y * .3 }px)`;
+  };
 </script>
 
 <AnimationFragment visible={visible}>
-  <div class="absolute h-screen -z-10" transition:fly={{duration: 1000, x: -1000, easing: cubicOut}}>
+  <div class="absolute h-screen -z-10" style="transform: {bgTranslate}"
+       transition:fly={{duration: 1000, x: -1000, easing: cubicOut}}>
     <BgDecoration height="40vw" posTop="50%" rotate="-60deg" translateY="-50%" width="40vw" />
   </div>
   <Back bind:height={navBarHeight} links={[{name: "Back", href: "/" }]} on:navigate={onBackPressed} />
   <div class="w-full lg:p-0 lg:w-4/5 mx-auto flex flex-col justify-evenly items-center lg:h-screen lg:py-12"
-       style="margin-top: {navBarHeight}">
+       style="margin-top: {navBarHeight}; transform: {mainBlockTranslate}">
     <div class="flex flex-col mt-12 lg:grid lg:grid-cols-2 lg:gap-16 lg:min-h-[60%] w-full">
       <div class="self-center" transition:fade={{duration: 1000, easing: cubicOut}}>
         <h2 class="text-4xl lg:text-5xl font-poppins-bold mb-2 p-4">Who am I ?</h2>
@@ -77,7 +91,7 @@
       <div>
         <ul class="h-full w-full relative hidden lg:block">
           {#each skills as skill}
-            <li transition:scale={{easing: elasticOut, delay: Math.floor(Math.random() * 1000) + 250, duration: 1000}}
+            <li transition:scale={{easing: elasticOut, delay: Math.floor(Math.random() * 1000) + 250, duration: 800}}
                 on:outroend={() => goto(destination)}
                 class="absolute {skill.classes}">
               <SkillElement skill={skill} />

@@ -22,9 +22,13 @@
 
   let nextUrl = "";
 
+  let initialMousePosition: { x: number, y: number } | null = null;
+  let bgTranslate = "";
+
   onMount(() => {
     const mobile = (getDeviceType() !== "desktop");
     document.body.style.overflow = mobile ? "scroll" : "hidden";
+    if (!mobile) document.body.addEventListener("mousemove", moveBlock);
     visible = true;
   });
 
@@ -75,6 +79,13 @@
     visible = false;
     nextUrl = e.detail;
   };
+
+  const moveBlock = (e: MouseEvent) => {
+    if (!initialMousePosition) initialMousePosition = { x: e.clientX, y: e.clientY + window.innerHeight * .1 };
+    const x = (e.clientX - initialMousePosition.x) / 16;
+    const y = (e.clientY - initialMousePosition.y) / 12;
+    bgTranslate = `translate(${ -x * .3 }px, ${ -y * .3 }px)`;
+  };
 </script>
 
 <AnimationFragment className="h-screen flex items-center" visible={visible}>
@@ -83,14 +94,17 @@
   {/if}
   <Back links={[{href: '/', name: "Back"}]} on:navigate={beforeNavigating} />
   <div class="absolute top-0 left-0 w-full h-full -z-10" on:outroend={() => goto(nextUrl)}
+       style="transform: {bgTranslate}"
        transition:fly={{x: -1000, duration: 1000, easing: cubicOut}}>
     <BgDecoration height="50vh" posTop="0" rotate="-45deg" translateX="-25%" width="50vh" />
   </div>
   <div class="absolute top-0 left-0 w-full h-full -z-10"
+       style="transform: {bgTranslate}"
        transition:fly={{y: -1000, duration: 1000, easing: cubicOut}}>
     <BgDecoration height="30vh" posRight="0%" posTop="0" rotate="-225deg" translateY="-50%" width="30vh" />
   </div>
   <div class="absolute top-0 left-0 w-full h-full -z-10"
+       style="transform: {bgTranslate}"
        transition:fly={{y: 1000, duration: 1000, easing: cubicOut}}>
     <BgDecoration height="70vh" posBottom="0" posRight="0" rotate="-135deg" translateY="50%" width="70vh" />
   </div>
