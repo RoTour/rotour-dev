@@ -112,7 +112,7 @@
         transition:fade={{duration: 500}}>
     <div class="flex flex-col sm:flex-row gap-4">
       <div class="flex flex-col flex-1">
-        <label for="email">Your Email*</label>
+        <label for="email">Your Email<span class="text-red-500">*</span></label>
         <input bind:value={email} class="border-2 border-black rounded-lg text-md font-poppins-regular px-2 py-1"
                id="email"
                type="email" />
@@ -125,12 +125,12 @@
       </div>
     </div>
     <div class="flex flex-col mt-4">
-      <label for="message">Message*</label>
+      <label for="message">Message<span class="text-red-500">*</span></label>
       <textarea bind:value={message}
                 class="border-2 border-black rounded-lg text-md font-poppins-regular px-2 py-1 resize-y"
                 id="message" />
     </div>
-    <div class="mt-2">* : Required fields</div>
+    <div class="mt-2"><span class="text-red-500">*</span> : Required fields</div>
     {#if validationErrorMessage}
       <div class="text-red-500 text-lg font-poppins-medium mt-2">{validationErrorMessage}</div>
     {/if}

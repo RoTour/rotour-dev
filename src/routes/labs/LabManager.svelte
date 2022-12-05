@@ -49,7 +49,6 @@
   let breakpoint;
 
   onMount(async () => {
-    console.log(contentType);
     const currentChapter = chapters.get(contentType) ?? webDevChapters;
     document.body.style.overflowX = "hidden";
     document.body.style.overflowY = "unset";
@@ -77,7 +76,6 @@
     setTimeout(() => previousExited = false, 0); // technique du bled no jutsu
     transitioningTo = idx;
     direction = 500 * idx || 500;
-    console.log({ transitioningTo, direction });
   };
 
 </script>

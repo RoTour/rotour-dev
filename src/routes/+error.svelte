@@ -18,7 +18,6 @@
 
   onMount(() => {
     visible = true;
-    console.log("page");
     message = $page.url.searchParams.get("msg") || "Are you lost ?";
     description = $page.url.searchParams.get("desc") || "The page you are looking for does not exist.";
   });

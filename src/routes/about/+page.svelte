@@ -63,7 +63,6 @@
   const onBackPressed = (e: { detail: string }) => {
     destination = e.detail;
     visible = false;
-    console.log("onBackPressed", e.detail, visible);
   };
 
   const moveBlock = (e: MouseEvent) => {

@@ -26,19 +26,10 @@
   onMount(() => {
     const mobile = (getDeviceType() !== "desktop");
     document.body.style.overflow = mobile ? "scroll" : "hidden";
-    console.log("user agent: ", navigator.userAgent, getDeviceType());
     if (!mobile) document.body.addEventListener("mousemove", moveBlock);
     if (mobile) scrollToProject(0);
     const [marginEl, card] = getBlocksDimensions();
     placeholderWidth = document.body.clientWidth / 2 - (card?.width ?? 0) / 2 - (card.x - marginEl.width);
-    console.log({
-      placeholderWidth,
-      windowWidth: document.body.clientWidth,
-      cardWidth: card?.width,
-      cardX: card?.x,
-      marginElWidth: marginEl.width
-    });
-    console.log("placeholder width", placeholderWidth);
   });
 
   const onClickProject = (project: Project) => {
@@ -140,7 +131,7 @@
        in:fade={{ duration: 300, delay: 300 }}
        out:fade={{ duration: 300, delay: 0 }}>
     <div bind:this={projectsMobileContainer}
-         class="flex flex-row overflow-x-scroll lg:flex-col gap-4 items-center snap-x snap-mandatory py-4
+         class="flex flex-row overflow-x-scroll lg:overflow-x-auto lg:flex-col gap-4 items-center snap-x snap-mandatory py-4
                 lg:py-0 lg:gap-8 lg:mx-4 lg:mx-0 lg:justify-center lg:mt-4 lg:col-span-2"
          style="transform: {projectsThumbnailsTranslate}"
     >
@@ -161,8 +152,8 @@
       {#if selectedProject}
         <div transition:fly={{x: 500, duration: 300}}
              on:outroend={onDesktopTransitionEnd}>
-          <h1 class="font-poppins-bold text-6xl mt-4 lg:mt-0 mb-0 lg:mb-4">{selectedProject.title}</h1>
-          <div class="[&>p]:text-lg [&>p]:font-poppins-medium [&_strong]:font-poppins-bold text-justify">
+          <h1 class="font-poppins-bold text-5xl mt-4 lg:mt-0 mb-0 lg:mb-4">{selectedProject.title}</h1>
+          <div class="[&>p]:text-md [&>p]:font-poppins-medium [&_strong]:font-poppins-bold text-justify">
             <SvelteMarkdown source={selectedProject.description} />
           </div>
         </div>

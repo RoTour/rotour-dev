@@ -26,7 +26,6 @@
         intervals.push(newInterval);
       } else {
         const newInterval = setInterval(() => {
-          console.log(rowSize, rowInfos.ref?.scrollWidth, rowInfos.ref?.scrollWidth / rowSize / 2);
           if (rowInfos.ref) {
             if (rowInfos.scrollCount >= rowSize) {
               rowInfos.scrollCount = 0;
@@ -54,13 +53,10 @@
   $: if (skills.length > 0) {
     const mobileSkills = skills.filter((skill) => skill.name !== "CSS");
     const bp = getCurrentBreakPoint()[1];
-    console.log(bp);
     rowSize = bp === "sm" ? 3 : bp === "md" ? 4 : mobileSkills.length;
-    console.log("rowSize", rowSize);
     for (let i = 0; i < mobileSkills.length; i += rowSize) {
       rows.push([...mobileSkills.slice(i, i + rowSize), ...mobileSkills.slice(i, i + rowSize)]);
     }
-    console.log("rows", rows);
   }
 
   $: {
