@@ -26,7 +26,10 @@
   onMount(() => {
     const mobile = (getDeviceType() !== "desktop");
     document.body.style.overflow = mobile ? "scroll" : "hidden";
-    if (!mobile) document.body.addEventListener("mousemove", moveBlock);
+    if (!mobile) {
+      document.body.addEventListener("mousemove", moveBlock);
+      document.body.style.overflowX = "hidden";
+    }
     if (mobile) scrollToProject(0);
     const [marginEl, card] = getBlocksDimensions();
     placeholderWidth = document.body.clientWidth / 2 - (card?.width ?? 0) / 2 - (card.x - marginEl.width);
