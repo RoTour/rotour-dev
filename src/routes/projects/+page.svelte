@@ -60,7 +60,7 @@
     const gap = card.x - marginEl.width;
     const offset = (card.width + gap) - window.innerWidth / 2;
     const scrollDest = offset + index * (card.width + gap);
-    projectsMobileContainer?.scrollTo({
+    (<HTMLDivElement>projectsMobileContainer)?.scrollTo({
       left: scrollDest,
       behavior: "smooth"
     });
@@ -86,7 +86,7 @@
   };
 
   const getBlocksDimensions = (): [DOMRect, DOMRect] => {
-    const [marginEl, card] = [...(projectsMobileContainer?.getElementsByTagName("div")) || []].map(it => it.getBoundingClientRect());
+    const [marginEl, card] = [...(projectsMobileContainer?.getElementsByTagName('div')) || []].map(it => it.getBoundingClientRect());
     return [marginEl, card];
   };
 
@@ -95,7 +95,7 @@
     const [marginEl, card] = getBlocksDimensions();
     const margin = card.x - marginEl.width;
     const cardWith = card.width;
-    projectsMobileContainer?.addEventListener("scroll", (e) => {
+    (<HTMLDivElement>projectsMobileContainer).addEventListener("scroll", (e) => {
       const scroll = (e.target as HTMLDivElement).scrollLeft;
       const cardIndex = Math.floor((scroll / (cardWith + 1 / 2 * margin)) + .5);
       selectedProject = projects[cardIndex];
