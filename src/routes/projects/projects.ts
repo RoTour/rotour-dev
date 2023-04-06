@@ -14,11 +14,22 @@ export const projects: Project[] = [
 			'The platform provides courses and exercises that apply the concepts covered.\n\n' +
 			"Users' queries are tested to see if their results match the expected output, allowing the learners to get immediate feedback on their productions.\n\n" +
 			'Thanks to the locally generated database on client side, users can experiment without fear: a simple refresh of the page is enough to start again on new bases.\n\n' +
-			'**Stack**: React, Nestjs, Typescript, MongoDB, Docker, DroneCI \n\n' +
-			'**Status**: Alpha',
+			'**Stack**: SvelteKit, tRPC, SQLite, Postgres, Tailwind, Docker, DroneCI \n\n' +
+			'**Status**: Preprod',
 		image: '/images/sqlearn-logo.svg',
 		color: '#1d1d1d',
-		link: 'https://sqlearn.rotour.dev/'
+		link: 'https://sqlearn2.preprod.rotour.dev/auth/login'
+	},
+	{
+		title: 'Ybook',
+		description:
+			'Ybook is a straightforward social media platform that focusing on simplicity and User Experience. \n\n' +
+			"It provides user identification, individualized profiles, images and text posting and sharing, management of friends, and engagement through likes, and comments. Users can modify privacy settings and do people searches. Ybook is a side project exhibiting a developer's ability to build a useful, ad-free social media platform without extraneous frills using.\n\n" +
+			'**Stack**: SvelteKit, tRPC, Tailwind, Prisma, Postgres, AWS S3, AWS Cognito Docker, DroneCI \n\n' +
+			'**Status**: Released\n\n',
+		image: '/images/Ybook16_9.svg',
+		color: '#041513',
+		link: 'https://ybook.rotour.dev/'
 	},
 	{
 		title: 'Ytracker',
@@ -26,10 +37,10 @@ export const projects: Project[] = [
 			"Ytracker is an internal data visualization tool developed for Toulouse Ynov Campus to track the progress of its students' projects and challenges.\n\n" +
 			'The tool was developed with the goal of being as modular as possible in order to add different visualizations as needed. \n\n' +
 			'**Stack**: React, Express, Typescript, SQLite, Docker \n\n' +
-			'**Status**: Released',
+			'**Status**: Released, internal use only',
 		image: '/images/ytracker-logo.svg',
 		color: '#181C24',
-		link: 'https://ytracker.rotour.dev/'
+		link: ''
 	},
 	{
 		title: 'SPM',
@@ -41,6 +52,6 @@ export const projects: Project[] = [
 			'**Status**: In development',
 		image: '/images/spm-logo.svg',
 		color: 'white',
-		link: 'https://spm.rotour.dev/'
+		link: ''
 	}
 ];

@@ -60,7 +60,7 @@
     const gap = card.x - marginEl.width;
     const offset = (card.width + gap) - window.innerWidth / 2;
     const scrollDest = offset + index * (card.width + gap);
-    (<HTMLDivElement>projectsMobileContainer)?.scrollTo({
+    (<HTMLDivElement> projectsMobileContainer)?.scrollTo({
       left: scrollDest,
       behavior: "smooth"
     });
@@ -86,7 +86,7 @@
   };
 
   const getBlocksDimensions = (): [DOMRect, DOMRect] => {
-    const [marginEl, card] = [...(projectsMobileContainer?.getElementsByTagName('div')) || []].map(it => it.getBoundingClientRect());
+    const [marginEl, card] = [...(projectsMobileContainer?.getElementsByTagName("div")) || []].map(it => it.getBoundingClientRect());
     return [marginEl, card];
   };
 
@@ -95,7 +95,7 @@
     const [marginEl, card] = getBlocksDimensions();
     const margin = card.x - marginEl.width;
     const cardWith = card.width;
-    (<HTMLDivElement>projectsMobileContainer).addEventListener("scroll", (e) => {
+    (<HTMLDivElement> projectsMobileContainer).addEventListener("scroll", (e) => {
       const scroll = (e.target as HTMLDivElement).scrollLeft;
       const cardIndex = Math.floor((scroll / (cardWith + 1 / 2 * margin)) + .5);
       selectedProject = projects[cardIndex];
@@ -135,7 +135,7 @@
        out:fade={{ duration: 300, delay: 0 }}>
     <div bind:this={projectsMobileContainer}
          class="flex flex-row overflow-x-scroll lg:overflow-x-auto lg:flex-col gap-4 items-center snap-x snap-mandatory py-4
-                lg:py-0 lg:gap-8 lg:mx-4 lg:mx-0 lg:justify-center lg:mt-4 lg:col-span-2"
+                lg:py-0 lg:gap-8 lg:mx-0 lg:justify-center lg:mt-4 lg:col-span-2"
          style="transform: {projectsThumbnailsTranslate}"
     >
       <div class="snap-center h-[15vh] lg:hidden" style="min-width: {placeholderWidth}px"></div>
@@ -159,6 +159,10 @@
           <div class="[&>p]:text-md [&>p]:font-poppins-medium [&_strong]:font-poppins-bold text-justify">
             <SvelteMarkdown source={selectedProject.description} />
           </div>
+          {#if selectedProject.link}
+            <a class="font-poppins-bold text-secondary" href={selectedProject.link} rel="noreferrer" target="_blank">Visit
+              website</a>
+          {/if}
         </div>
       {/if}
     </div>
