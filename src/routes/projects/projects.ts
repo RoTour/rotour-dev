@@ -18,7 +18,7 @@ export const projects: Project[] = [
 			'**Status**: Preprod',
 		image: '/images/sqlearn-logo.svg',
 		color: '#1d1d1d',
-		link: 'https://sqlearn2.preprod.rotour.dev/auth/login'
+		link: 'https://sqlearn.vercel.app/auth/register'
 	},
 	{
 		title: 'Ybook',
