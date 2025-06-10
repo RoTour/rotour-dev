@@ -8,7 +8,7 @@
   export let posLeft = "unset";
   export let posRight = "unset";
   export let posBottom = "unset";
-  export let ref: HTMLDivElement;
+  export let ref: HTMLDivElement | undefined;
 </script>
 
 <div class="hidden md:block absolute bg-gradient-to-r from-secondary to-primary rounded-xl -z-10"

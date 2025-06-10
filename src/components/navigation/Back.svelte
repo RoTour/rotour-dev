@@ -12,7 +12,7 @@
   const onNavigate = (href: string) => dispatch("navigate", href);
 </script>
 
-<div bind:clientHeight={height} class="flex w-full items-center bg-white md:bg-transparent fixed top-0 left-0 z-50">
+<div bind:clientHeight={height} class="flex w-full items-center bg-white md:bg-transparent fixed top-0 left-0 z-40">
   <div class="bg-gradient-to-r from-primary via-primary to-secondary md:bg-none h-12 w-full absolute top-0 left-0">
     {#each links as link, idx}
       <button on:click={() => onNavigate(link.href)}

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { Trees } from 'lucide-svelte';
 	import controlsStore from './ControlsStore.svelte.ts';
-	import Button, { buttonVariants } from '$lib/shadcn/ui/button/button.svelte';
+	import { buttonVariants } from '$lib/shadcn/ui/button/button.svelte';
 	import * as Tooltip from '$lib/shadcn/ui/tooltip';
 	import { cn } from '$lib/utils.ts';
 </script>
 
-<aside class="fixed top-0 right-0 m-4 z-40">
+<aside class="fixed top-0 right-0 m-4 z-50">
 	<Tooltip.Provider>
 		<Tooltip.Root>
 			<Tooltip.Trigger
@@ -15,7 +15,7 @@
 			>
 				<Trees size={24} />
         {#if !controlsStore.isParallaxEnabled}
-          <div class="bg-black h-[2px] w-full -rotate-45 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50"></div>
+          <div class="bg-black h-[2px] w-full -rotate-45 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[60]"></div>
         {/if}
 			</Tooltip.Trigger>
 			<Tooltip.Content>

@@ -1,16 +1,34 @@
+import { browser } from '$app/environment';	
+
+type CacheControl = {
+	getItem: (key: string) => string | null;
+	setItem: (key: string, value: string) => void;
+}
+
 class ControlsStore {
 	#parallaxEnabled = $state(true);
+	#cacheControl	?: CacheControl;
+
+	constructor(cacheControl?: CacheControl) {
+		this.#cacheControl = cacheControl;
+		this.#parallaxEnabled = cacheControl?.getItem("parallaxEnabled") === "true";
+	}
 
 	enableParallax() {
-		this.#parallaxEnabled = true;
+		this.#setParallaxEnabled(true);
 	}
 
 	disableParallax() {
-		this.#parallaxEnabled = false;
+		this.#setParallaxEnabled(false);
 	}
 
 	toggleParallax() {
-		this.#parallaxEnabled = !this.#parallaxEnabled;
+		this.#setParallaxEnabled(!this.#parallaxEnabled);
+	}
+
+	#setParallaxEnabled(value: boolean) {
+		this.#parallaxEnabled = value;
+		this.#cacheControl?.setItem("parallaxEnabled", value.toString());
 	}
 
 	get isParallaxEnabled() {
@@ -18,4 +36,4 @@ class ControlsStore {
 	}
 }
 
-export default new ControlsStore();
+export default new ControlsStore(browser ? window?.localStorage : undefined);

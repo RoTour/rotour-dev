@@ -1,106 +1,171 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import BgDecoration from "@components/background/BgDecoration.svelte";
-  import IconCSS from "@components/icons/logos/IconCSS.svelte";
-  import IconDocker from "@components/icons/logos/IconDocker.svelte";
-  import IconDrone from "@components/icons/logos/IconDrone.svelte";
-  import IconKubernetes2 from "@components/icons/logos/IconKubernetes2.svelte";
-  import IconNodejs4 from "@components/icons/logos/IconNodejs4.svelte";
-  import IconPostgres from "@components/icons/logos/IconPostgres.svelte";
-  import IconReact from "@components/icons/logos/IconReact.svelte";
-  import IconSvelte from "@components/icons/logos/IconSvelte.svelte";
-  import IconTailwind from "@components/icons/logos/IconTailwind.svelte";
-  import IconTypescript from "@components/icons/logos/IconTypescript.svelte";
-  import Back from "@components/navigation/Back.svelte";
-  import AnimationFragment from "@components/svelte/AnimationFragment.svelte";
-  import type { Skill } from "@types/skill";
-  import { onMount } from "svelte";
-  import { cubicOut, elasticOut } from "svelte/easing";
-  import { fade, fly, scale } from "svelte/transition";
-  import { getDeviceType } from "../../utils/tailwind-helper";
-  import AboutMeData from "./data.ts";
-  import MobileSkills from "./MobileSkills.svelte";
-  import SkillElement from "./Skill.svelte";
+  import { goto } from '$app/navigation';
+  import { cubicOut } from 'svelte/easing';
+  import { fade, fly } from 'svelte/transition';
 
-  let navBarHeight = 0;
-  let visible = false;
-  let destination = "";
+  // --- Component Imports ---
+  import AnimationFragment from '@components/svelte/AnimationFragment.svelte';
+  import Back from '@components/navigation/Back.svelte';
+  import BgDecoration from '@components/background/BgDecoration.svelte';
+  import Controls from '@components/controls/ControlsStore.svelte';
 
-  let initialMousePosition: { x: number, y: number } | null = null;
-  let mainBlockTranslate = "";
-  let bgTranslate = "";
+  // --- Svelte 5 State ---
+  let visible = $state(false);
+  let destination = $state('');
+  let navBarHeight = $state(0);
+  let initialMousePosition = $state<{ x: number; y: number } | null>(null);
+  let mainBlockTranslate = $state('');
+  let bgTranslate = $state('');
+  let parallaxEnabled = $derived(Controls.isParallaxEnabled);
 
-  const formatTxt = (text: string) => {
-    return text.replace(/\n/g, "<br/><br/>");
-  };
+  const aboutMeText = `I'm a 24-year-old developer with a passion for creating beautiful, high-performance web experiences. My journey into code started with a curiosity for how things work, and it has evolved into a career focused on building intuitive and efficient applications.`;
 
-  // place randomly on the screen
-  // NodeJS Typescript SQL Svelte Tailwind ReactJS Docker git DroneCI Kubernetes CSS
-  const skills: Skill[] = [
-    { name: "ReactJS", classes: "top-1/2 left-1/2 text-5xl", icon: IconReact },
-    { name: "Svelte", classes: "top-1/2 right-0 -translate-y-[200%] text-3xl", icon: IconSvelte },
-    {
-      name: "Tailwind",
-      classes: "top-[18%] right-[10%] -translate-x-1/2 translate-y-full text-2xl",
-      icon: IconTailwind
-    },
-    { name: "CSS", classes: "bottom-[10%] right-0 -translate-x-full text-2xl", icon: IconCSS },
-    { name: "Typescript", classes: "top-[15%] left-0 -translate-x-[10%] text-4xl", icon: IconTypescript },
-    { name: "NodeJS", classes: "top-0 left-1/2 -translate-x-1/2 text-5xl", icon: IconNodejs4 },
-    { name: "SQL", classes: "right-0 top-[10%] -translate-x-1/2 text-3xl", icon: IconPostgres },
-    { name: "Kubernetes", classes: "bottom-[20%] left-[5%] text-4xl", icon: IconKubernetes2 },
-    { name: "DroneCI", classes: "bottom-[50%] right-1/2 -translate-x-1/2 text-3xl", icon: IconDrone },
-    { name: "Docker", classes: "bottom-0 left-1/2 -translate-x-1/2 text-5xl", icon: IconDocker }
-  ];
-
-  onMount(() => {
+  // --- Lifecycle & Effects with Svelte 5 ---
+  $effect(() => {
     visible = true;
-    const mobile = (getDeviceType() !== "desktop");
-    document.body.style.overflow = mobile ? "scroll" : "hidden";
-    if (!mobile) document.body.addEventListener("mousemove", moveBlock);
+    const handleMouseMove = (e: MouseEvent) => moveBlock(e);
+    document.body.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      document.body.removeEventListener('mousemove', handleMouseMove);
+    };
   });
 
+  // --- Methods ---
   const onBackPressed = (e: { detail: string }) => {
     destination = e.detail;
     visible = false;
   };
 
+  const onOutroEnd = () => {
+    if (destination) {
+      goto(destination);
+    }
+  };
+
   const moveBlock = (e: MouseEvent) => {
-    if (!initialMousePosition) initialMousePosition = { x: e.clientX, y: e.clientY + window.innerHeight * .1 };
-    const x = (e.clientX - initialMousePosition.x) / 16;
-    const y = (e.clientY - initialMousePosition.y) / 12;
-    mainBlockTranslate = `translate(${ x * .5 }px, ${ y * .5 }px)`;
-    bgTranslate = `translate(${ -x * .3 }px, ${ -y * .3 }px)`;
+    if (!parallaxEnabled) return;
+    if (!initialMousePosition) {
+      initialMousePosition = { x: e.clientX, y: e.clientY + window.innerHeight * 0.1 };
+    }
+    const x = (e.clientX - initialMousePosition.x) / 20;
+    const y = (e.clientY - initialMousePosition.y) / 15;
+    mainBlockTranslate = `translate(${x * 0.7}px, ${y * 0.7}px)`;
+    bgTranslate = `translate(${-x * 0.3}px, ${-y * 0.3}px)`;
   };
 </script>
 
-<AnimationFragment visible={visible}>
-  <div class="absolute h-screen -z-10" style="transform: {bgTranslate}"
-       transition:fly={{duration: 1000, x: -1000, easing: cubicOut}}>
+<AnimationFragment {visible}>
+  <!-- Background Decorations -->
+  <div
+    class="absolute h-screen w-screen top-0 left-0 -z-10"
+    style="transform: {bgTranslate}"
+    in:fly={{ duration: 1000, x: -1000, easing: cubicOut }}
+    out:fly={{ duration: 1000, x: -1000, easing: cubicOut }}
+    onoutroend={onOutroEnd}
+  >
     <BgDecoration height="40vw" posTop="50%" rotate="-60deg" translateY="-50%" width="40vw" />
   </div>
-  <Back bind:height={navBarHeight} links={[{name: "Back", href: "/" }]} on:navigate={onBackPressed} />
-  <div class="w-full lg:p-0 lg:w-4/5 mx-auto flex flex-col justify-evenly items-center lg:h-screen lg:py-12"
-       style="margin-top: {navBarHeight}; transform: {mainBlockTranslate}">
-    <div class="flex flex-col mt-12 lg:grid lg:grid-cols-2 lg:gap-16 lg:min-h-[60%] w-full">
-      <div class="self-center" transition:fade={{duration: 1000, easing: cubicOut}}>
-        <h2 class="text-4xl lg:text-5xl font-poppins-bold mb-2 p-4">Who am I ?</h2>
-        <p class="prose font-poppins-medium text-sm lg:text-lg p-4">{@html formatTxt(AboutMeData.aboutMeTxt)}</p>
+  <div
+    class="absolute h-screen w-screen top-0 left-0 -z-10"
+    in:fly={{ duration: 1000, x: 1000, easing: cubicOut }}
+    out:fly={{ duration: 1000, x: 1000, easing: cubicOut }}
+  >
+    <BgDecoration height="20vw" posBottom="0" posRight="0" rotate="120deg" translateY="0%" width="20vw" />
+  </div>
+
+  <!-- Back Navigation -->
+  <Back bind:height={navBarHeight} links={[{ name: 'Back', href: '/' }]} on:navigate={onBackPressed} />
+
+  <!-- Main Content Grid -->
+  <div
+    class="w-full max-w-7xl mx-auto flex flex-col justify-center lg:h-screen lg:py-24 px-4"
+    style="padding-top: {navBarHeight}px;"
+    out:fade={{ duration: 800, delay: 200, easing: cubicOut }}
+  >
+    <div
+      class="w-full flex-grow lg:grid lg:grid-cols-5 lg:gap-16 xl:gap-24 lg:items-center"
+      style="transform: {mainBlockTranslate}"
+    >
+      <!-- Left Column: Image -->
+      <div class="lg:col-span-2 flex justify-center" in:fade={{ duration: 800, delay: 200, easing: cubicOut }}>
+        <img
+          src="/images/pp-linkedin.webp"
+          alt="A portrait"
+          class="rounded-lg shadow-2xl object-cover w-full max-w-sm aspect-[4/5]"
+          onerror={(e: Event) => {
+            const target = e.target as HTMLImageElement;
+            target.src = 'https://placehold.co/500x600/1a1a1a/ffffff?text=Image+Not+Found'
+          }}
+        />
       </div>
-      <div>
-        <ul class="h-full w-full relative hidden lg:block">
-          {#each skills as skill}
-            <li transition:scale={{easing: elasticOut, delay: Math.floor(Math.random() * 1000) + 250, duration: 800}}
-                on:outroend={() => goto(destination)}
-                class="absolute {skill.classes}">
-              <SkillElement skill={skill} />
-            </li>
-          {/each}
-        </ul>
-        <div class="block lg:hidden" transition:fade={{duration: 1000, easing: cubicOut}}>
-          <MobileSkills skills={skills} />
+
+      <!-- Right Column: All Text Content -->
+      <div
+        class="lg:col-span-3 mt-12 lg:mt-0"
+        in:fly={{ x: 100, duration: 800, delay: 400, easing: cubicOut }}
+      >
+        <div class="flex flex-col gap-y-8">
+          <div>
+            <h1 class="text-4xl lg:text-5xl font-poppins-bold mb-4">Who am I?</h1>
+            <p class="prose font-poppins-medium text-base lg:text-lg text-justify max-w-prose">
+              {aboutMeText}
+            </p>
+          </div>
+
+          <hr class="border-gray-200 dark:border-gray-700" />
+
+          <div class="flex flex-col gap-y-8">
+            <div>
+              <h3 class="font-poppins-bold text-xl mb-2">My Approach to Building for the Web</h3>
+              <p class="text-gray-600 dark:text-gray-300 max-w-prose">
+                I believe in pragmatic solutions and clean code. My goal is always to build products
+                that are not just functional, but also a joy to use, maintain, and scale.
+              </p>
+            </div>
+            <div>
+              <h3 class="font-poppins-bold text-xl mb-2">Why I Choose Svelte</h3>
+              <p class="text-gray-600 dark:text-gray-300 max-w-prose">
+                While proficient in React, I choose Svelte for its remarkable development speed. It
+                allows me to build and ship the same rich, interactive features much faster, thanks
+                to its minimal boilerplate and truly reactive nature. This means less time wrestling
+                with the framework and more time delivering value.
+              </p>
+            </div>
+          </div>
+
+          <!-- Blog Call to Action -->
+          <div class="mt-4">
+            <a
+              href="/blog"
+              class="group inline-flex items-center gap-3 bg-gray-100 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700/50 transition-all duration-300 rounded-lg px-6 py-4 text-lg font-poppins-bold no-underline"
+            >
+              <span>Read My Blog</span>
+              <span class="transition-transform duration-300 group-hover:translate-x-1">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-arrow-right"
+                  ><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg
+                >
+              </span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </AnimationFragment>
+
+<style>
+  .prose {
+    max-width: 65ch;
+  }
+</style>
