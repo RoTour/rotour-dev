@@ -1,109 +1,154 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import BgDecoration from "@components/background/BgDecoration.svelte";
-  import Back from "@components/navigation/Back.svelte";
-  import AnimationFragment from "@components/svelte/AnimationFragment.svelte";
   import { onMount } from "svelte";
   import SvelteMarkdown from "svelte-markdown";
   import { fade, fly } from "svelte/transition";
+  
+  // Assuming these are your components, no change needed
+  import BgDecoration from "@components/background/BgDecoration.svelte";
+  import Back from "@components/navigation/Back.svelte";
+  import AnimationFragment from "@components/svelte/AnimationFragment.svelte";
   import { getDeviceType } from "../../utils/tailwind-helper";
   import { type Project, projects } from "./projects";
   import ProjectThumbnail from "./ProjectThumnail.svelte";
+  import Controls from "@components/controls/ControlsStore.svelte";
 
-  let selectedProject: Project | null = projects[0];
-  let projectsMobileContainer: HTMLDivElement | null = null; // scroll container for mobile
-
-  let visible = true; // for in/out animation
-
-  // Desktop: parallax effect
+  let selectedProject: Project | null = $state(projects[0]);
+  let visible = $state(true);
+  let projectsThumbnailsTranslate = $state("");
+  let projectDescriptionTranslate = $state("");
+  let bgTranslate = $state("");
+  let preventWiggle = $state(false);
+  let placeholderWidth = $state(0);
+  let nextProjectIndexToSelect = $state(0);
+  let parallaxEnabled = $derived(Controls.isParallaxEnabled)
+  
+  let projectsMobileContainer: HTMLDivElement | null = null;
   let initialMousePosition: { x: number, y: number } | null = null;
-  let projectsThumbnailsTranslate = "";
-  let projectDescriptionTranslate = "";
-  let bgTranslate = "";
-
-  let preventWiggle = false;
-
-  onMount(() => {
-    const mobile = (getDeviceType() !== "desktop");
-    document.body.style.overflow = mobile ? "scroll" : "hidden";
-    if (!mobile) {
-      document.body.addEventListener("mousemove", moveBlock);
-      document.body.style.overflowX = "hidden";
-    }
-    if (mobile) scrollToProject(0);
-    const [marginEl, card] = getBlocksDimensions();
-    placeholderWidth = document.body.clientWidth / 2 - (card?.width ?? 0) / 2 - (card.x - marginEl.width);
-  });
-
+  
+  
+  // --- METHODS ---
+  // Functions that modify state are largely the same
   const onClickProject = (project: Project) => {
     const onMobile = getDeviceType() !== "desktop";
     if (onMobile) {
       const index = projects.indexOf(project);
       scrollToProject(index);
-      // selectedProject = project;
       return;
     }
     preventWiggle = true;
     nextProjectIndexToSelect = projects.indexOf(project) ?? 0;
-    if (selectedProject && nextProjectIndexToSelect !== projects.indexOf(selectedProject)) selectedProject = null;
+    // The transition will handle updating the selected project
+    if (selectedProject && nextProjectIndexToSelect !== projects.indexOf(selectedProject)) {
+      selectedProject = null;
+    }
   };
 
-  // Store initial values
-  let marginEl: DOMRect;
-  let card: DOMRect;
-  let placeholderWidth = 0;
-
-  let nextProjectIndexToSelect = 0;
+  const getBlocksDimensions = (): [DOMRect, DOMRect] | [null, null] => {
+      if (!projectsMobileContainer) return [null, null];
+      const [marginEl, card] = [...projectsMobileContainer.getElementsByTagName("div")].map(it => it.getBoundingClientRect());
+      return [marginEl, card];
+  };
 
   const scrollToProject = (index: number) => {
-    if (!marginEl || !card) [marginEl, card] = getBlocksDimensions();
+    const [marginEl, card] = getBlocksDimensions();
+    if (!marginEl || !card || !projectsMobileContainer) return;
+
     const gap = card.x - marginEl.width;
     const offset = (card.width + gap) - window.innerWidth / 2;
     const scrollDest = offset + index * (card.width + gap);
-    (<HTMLDivElement> projectsMobileContainer)?.scrollTo({
+    
+    projectsMobileContainer.scrollTo({
       left: scrollDest,
       behavior: "smooth"
     });
   };
 
   const moveBlock = (e: MouseEvent) => {
-    if (!initialMousePosition) initialMousePosition = { x: e.clientX, y: e.clientY + window.innerHeight * .1 };
+    if (!parallaxEnabled) return;
+    if (!initialMousePosition) {
+        initialMousePosition = { x: e.clientX, y: e.clientY + window.innerHeight * 0.1 };
+    }
     const x = (e.clientX - initialMousePosition.x) / 16;
     const y = (e.clientY - initialMousePosition.y) / 12;
-    projectsThumbnailsTranslate = `translate(${ x * .5 }px, ${ y * .5 }px)`;
-    projectDescriptionTranslate = `translate(${ x * .9 }px, ${ y * .9 }px)`;
-    bgTranslate = `translate(${ -x * .3 }px, ${ -y * .3 }px)`;
+    projectsThumbnailsTranslate = `translate(${x * 0.5}px, ${y * 0.5}px)`;
+    projectDescriptionTranslate = `translate(${x * 0.9}px, ${y * 0.9}px)`;
+    bgTranslate = `translate(${-x * 0.3}px, ${-y * 0.3}px)`;
   };
 
   const onDesktopTransitionEnd = () => {
-    if ((getDeviceType() !== "desktop")) return;
-    selectedProject = projects[nextProjectIndexToSelect];
+    if (getDeviceType() === "desktop") {
+      selectedProject = projects[nextProjectIndexToSelect];
+    }
   };
 
   const onExitPage = () => {
-    document.body.removeEventListener("mousemove", moveBlock);
+    // The cleanup function from the $effect will remove the listener
     goto("/");
   };
 
-  const getBlocksDimensions = (): [DOMRect, DOMRect] => {
-    const [marginEl, card] = [...(projectsMobileContainer?.getElementsByTagName("div")) || []].map(it => it.getBoundingClientRect());
-    return [marginEl, card];
-  };
+  $inspect("Selected project", selectedProject);
 
-  // Auto select project on mobile on scroll
-  $: if (projectsMobileContainer) {
+  // --- LIFECYCLE & EFFECTS ---
+  onMount(() => {
+    const isMobile = getDeviceType() !== 'desktop';
+    document.body.style.overflow = isMobile ? 'scroll' : 'hidden';
+    document.body.style.overflowX = isMobile ? 'scroll' : 'hidden';
+
+    if (isMobile) {
+      scrollToProject(0);
+    }
+
     const [marginEl, card] = getBlocksDimensions();
-    const margin = card.x - marginEl.width;
-    const cardWith = card.width;
-    (<HTMLDivElement> projectsMobileContainer).addEventListener("scroll", (e) => {
-      const scroll = (e.target as HTMLDivElement).scrollLeft;
-      const cardIndex = Math.floor((scroll / (cardWith + 1 / 2 * margin)) + .5);
-      selectedProject = projects[cardIndex];
-    });
-  }
+    if (card && marginEl) {
+        placeholderWidth = document.body.clientWidth / 2 - card.width / 2 - (card.x - marginEl.width);
+    }
+
+    // Cleanup function for onMount
+    return () => {
+        document.body.style.overflow = 'auto';
+        document.body.style.overflowX = 'auto';
+    };
+  });
+  
+  // Use $effect for side effects that depend on state or props
+  $effect(() => {
+    // This effect runs whenever `projectsMobileContainer` changes.
+    // We check if it's not null before adding the listener.
+    if (projectsMobileContainer) {
+      const isMobile = getDeviceType() !== 'desktop';
+      
+      const handleScroll = (e: Event) => {
+        const [marginEl, card] = getBlocksDimensions();
+        if (!card || !marginEl) return;
+        const margin = card.x - marginEl.width;
+        const cardWidth = card.width;
+        const scroll = (e.target as HTMLDivElement).scrollLeft;
+        const cardIndex = Math.round(scroll / (cardWidth + margin));
+        selectedProject = projects[cardIndex];
+      };
+
+      if (isMobile) {
+        projectsMobileContainer.addEventListener("scroll", handleScroll);
+      } else {
+        document.body.addEventListener("mousemove", moveBlock);
+      }
+      
+      // The return function is a *cleanup* function.
+      // Svelte runs it before re-running the effect or when the component is destroyed.
+      return () => {
+        if (isMobile) {
+            projectsMobileContainer?.removeEventListener("scroll", handleScroll);
+        } else {
+            document.body.removeEventListener("mousemove", moveBlock);
+        }
+      };
+    }
+  });
 
 </script>
 
+<!-- The template (HTML) part remains exactly the same -->
 <AnimationFragment className="lg:overflow-y-hidden lg:h-screen flex flex-col" visible={visible}>
   <div class="relative z-20">
     <Back links={[{name: 'Back', href: '/'}]} on:navigate={() => (visible = false)} />
@@ -120,7 +165,7 @@
     </div>
     <div class="block absolute bottom-0 right-0"
          in:fly={{x: 250, duration: 500}}
-         on:outroend={onExitPage}
+         onoutroend={onExitPage}
          out:fly={{x: 250, duration: 500, delay: 300}}>
 
       <BgDecoration height="15vh" posBottom="0"
@@ -141,10 +186,10 @@
       <div class="snap-center h-[15vh] lg:hidden" style="min-width: {placeholderWidth}px"></div>
       {#each projects as project}
         <div class="h-[15vh] aspect-video cursor-pointer transition-all duration-300 snap-center
-                    {selectedProject === project ? `lg:scale-110 lg:translate-x-4 ${!preventWiggle && 'lg:hover:animate-project-card-selected-hover'}` : 'lg:opacity-50 lg:-translate-x-4 lg:duration-200 lg:hover:translate-x-0'}"
-             on:mouseleave={() => (preventWiggle = false)}
-             on:click={() => onClickProject(project)}
-             on:keydown={() => onClickProject(project)}>
+                    {selectedProject?.title === project.title ? `lg:scale-110 lg:translate-x-4 ${!preventWiggle && 'lg:hover:animate-project-card-selected-hover'}` : 'lg:opacity-50 lg:-translate-x-4 lg:duration-200 lg:hover:translate-x-0'}"
+             onmouseleave={() => (preventWiggle = false)}
+             onclick={() => onClickProject(project)}
+             onkeydown={() => onClickProject(project)}>
           <ProjectThumbnail imageLink={project.image} bgColor={project.color} />
         </div>
       {/each}
@@ -154,7 +199,7 @@
          style="transform: {projectDescriptionTranslate}">
       {#if selectedProject}
         <div transition:fly={{x: 500, duration: 300}}
-             on:outroend={onDesktopTransitionEnd}>
+             onoutroend={onDesktopTransitionEnd}>
           <h1 class="font-poppins-bold text-5xl mt-4 lg:mt-0 mb-0 lg:mb-4">{selectedProject.title}</h1>
           <div class="[&>p]:text-md [&>p]:font-poppins-medium [&_strong]:font-poppins-bold text-justify">
             <SvelteMarkdown source={selectedProject.description} />
@@ -168,4 +213,3 @@
     </div>
   </div>
 </AnimationFragment>
-

@@ -1,10 +1,12 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import path from "path";
+import devtoolsJson from 'vite-plugin-devtools-json';
+
 
 /** @type {import('vite').UserConfig} */
 const config = {
 	envDir: './env',
-	plugins: [sveltekit()],
+	plugins: [sveltekit(), devtoolsJson()],
 	server: {
 		port: 5173,
 	},

@@ -1,10 +1,12 @@
 <script lang="ts">
+  import "../styles/app.css";
+  import "../styles/fonts.css";
+  import "../styles/index.css";
   import { notification } from "$lib/notification.store";
   import { onMount } from "svelte";
   import { elasticOut } from "svelte/easing";
   import { fly } from "svelte/transition";
-  import "../styles/fonts.css";
-  import "../styles/index.css";
+	import Controls from "@components/controls/Controls.svelte";
 
   onMount(() => {
     notification.subscribe((value) => {
@@ -29,4 +31,6 @@
     </div>
   </div>
 {/if}
+
+<Controls />
 <slot />

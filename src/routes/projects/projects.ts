@@ -8,6 +8,24 @@ export type Project = {
 
 export const projects: Project[] = [
 	{
+		title: 'RALTech School + Intranet',
+		description: 'Raltech School is an online web development school, where each student gets a personalized planning based on his skills and preferences. \n\n RALTech aims to provide a unique experience to each student, and tries to make sure that its students are operational when they land their first job by making them work on real projects, from conception to production and maintenance. \n\n RALTech\'s intranet is a web application that allows students manage their lessons, projects, labs, and grades.\n\n We also developed a planning builder augmented with AI to help student define and redefine their planning, goals and keep track of their progress.' + 
+		'\n\n **Status**: Online, +200 students taught',
+		image: '/images/ColorNoBg 16_9.svg',
+		color: '#1d1d1d',
+		link: 'https://raltech.school'
+	},
+	{
+		title: 'CodeRonin',
+		description: 'CodeRonin is a web application dedicated to learning development. \n\n' +
+			'The app aims to make learning code as fun as possible providing a gamified experience with experience point, achievements, leaderboard and instant feedback. \n\n' +
+			'**Stack**: SvelteKit, tRPC, SQLite, Postgres, Tailwind, Docker, Coolify \n\n' +
+			'**Status**: Production, 50 users',
+		image: '/images/coderonin-logo-text.svg',
+		color: '#1d1d1d',
+		link: 'https://coderonin.raltech.school'
+	},
+	{
 		title: 'SQLearn',
 		description:
 			'SQLearn is a web application dedicated to learning SQL.\n\n' +
@@ -15,10 +33,10 @@ export const projects: Project[] = [
 			"Users' queries are tested to see if their results match the expected output, allowing the learners to get immediate feedback on their productions.\n\n" +
 			'Thanks to the locally generated database on client side, users can experiment without fear: a simple refresh of the page is enough to start again on new bases.\n\n' +
 			'**Stack**: SvelteKit, tRPC, SQLite, Postgres, Tailwind, Docker, DroneCI \n\n' +
-			'**Status**: Preprod',
-		image: '/images/sqlearn-logo.svg',
+			'**Status**: Production, 150 users',
+		image: '/images/sqlearn-logo.png',
 		color: '#1d1d1d',
-		link: 'https://sqlearn.rotour.dev/auth/register'
+		link: 'https://sqlearn.raltech.school/auth/register'
 	},
 	{
 		title: 'Ybook',
@@ -26,32 +44,9 @@ export const projects: Project[] = [
 			'Ybook is a straightforward social media platform that focusing on simplicity and User Experience. \n\n' +
 			"It provides user identification, individualized profiles, images and text posting and sharing, management of friends, and engagement through likes, and comments. Users can modify privacy settings and do people searches. Ybook is a side project exhibiting a developer's ability to build a useful, ad-free social media platform without extraneous frills using.\n\n" +
 			'**Stack**: SvelteKit, tRPC, Tailwind, Prisma, Postgres, AWS S3, AWS Cognito Docker, DroneCI \n\n' +
-			'**Status**: Released\n\n',
-		image: '/images/Ybook16_9.svg',
+			'**Status**: Released, Technical Demo\n\n',
+		image: '/images/ybook-logo2.svg',
 		color: '#041513',
 		link: 'https://ybook.rotour.dev/'
-	},
-	{
-		title: 'Ytracker',
-		description:
-			"Ytracker is an internal data visualization tool developed for Toulouse Ynov Campus to track the progress of its students' projects and challenges.\n\n" +
-			'The tool was developed with the goal of being as modular as possible in order to add different visualizations as needed. \n\n' +
-			'**Stack**: React, Express, Typescript, SQLite, Docker \n\n' +
-			'**Status**: Released, internal use only',
-		image: '/images/ytracker-logo.svg',
-		color: '#181C24',
-		link: ''
-	},
-	{
-		title: 'SPM',
-		description:
-			'Platform to manage a large number of projects simultaneously, for schools / incubators.\n\n' +
-			'The application should allow users to propose projects or apply to existing projects.\n\n' +
-			'An advanced administrator space will allow organizers to have an overview of projects and to manage their events in the best possible way.\n\n' +
-			'**Stack**: SvelteKit, Supabase, Typescript, Postgres, Docker, DroneCI\n\n' +
-			'**Status**: In development',
-		image: '/images/spm-logo.svg',
-		color: 'white',
-		link: ''
 	}
 ];
