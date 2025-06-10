@@ -9,22 +9,5 @@
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
-		"paths": {
-			"@components/*": [
-				"./src/components/*"
-			],
-			"@models/*": [
-				"./src/types/*"
-			],
-			"@services/*": [
-				"./src/services/*"
-			],
-			"@types/*": [
-				"./src/types/*"
-			],
-			"$lib/*": [
-				"./src/lib/*"
-			]
-		}
 	}
 }

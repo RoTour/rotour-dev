@@ -6,7 +6,7 @@ const config = {
 	envDir: './env',
 	plugins: [sveltekit()],
 	server: {
-		port: 10001,
+		port: 5173,
 	},
 	preview : {
 		port: 10001,
