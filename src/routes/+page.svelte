@@ -104,7 +104,7 @@
         <SecondaryBtn onClick={() => animateExit("/projects")}>🧳 Projects</SecondaryBtn>
       </div>
       <div in:scale={{ easing: elasticOut, duration: 1000, delay: 700 }} out:scale={{ easing: backIn, duration: 400, delay: 200 }}>
-        <SecondaryBtn onClick={() => animateExit("/labs")}>🧪 Labs</SecondaryBtn>
+        <SecondaryBtn onClick={() => window.open("https://raltech.school", "_blank")}>🧪 RALTech School</SecondaryBtn>
       </div>
       <div in:scale={{ easing: elasticOut, duration: 1000, delay: 800 }} out:scale={{ easing: backIn, duration: 400, delay: 300 }}>
         <SecondaryBtn onClick={() => animateExit("/contact")}>✉️ Contact Me</SecondaryBtn>

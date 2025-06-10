@@ -55,13 +55,11 @@
       return;
     }
     const payload = {
-      to: "robin.tourne+rotourdev@gmail.com",
-      from: "contact@rotour.dev",
-      "templateId": "d-710108eab9cc461aa96c5705f22cebec",
-      message: `From: ${ email }<br> ${ message }`,
+      message: `Contact from ${email} ${company ? `(from ${company})` : ""}: ${message}`,
       author: company
     };
-    fetch("https://mail.rotour.dev/send", {
+    loading = true;
+    fetch("https://n8n.raltech.school/webhook/portfolio/contact", {
       method: "POST",
       body: JSON.stringify(payload),
       headers: { "Content-Type": "application/json" }
@@ -72,6 +70,9 @@
       })
       .catch(() => {
         notification.set({ type: "error", message: "An error occurred while sending the message :(" });
+      })
+      .finally(() => {
+        loading = false;
       });
   };
 
