@@ -137,7 +137,7 @@
           <!-- Blog Call to Action -->
           <div class="mt-4">
             <a
-              href="/blog"
+              href="https://raltech.school/blog"
               class="group inline-flex items-center gap-3 bg-gray-100 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700/50 transition-all duration-300 rounded-lg px-6 py-4 text-lg font-poppins-bold no-underline"
             >
               <span>Read My Blog</span>

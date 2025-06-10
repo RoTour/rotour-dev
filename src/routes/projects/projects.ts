@@ -49,7 +49,11 @@ export const projects: Project[] = [
 			'**Status**: Production, 150 users',
 		image: '/images/sqlearn-logo.png',
 		color: '#1d1d1d',
-		link: 'https://sqlearn.raltech.school/auth/register'
+		link: 'https://sqlearn.raltech.school/auth/register',
+		descriptionImages: [
+			'/images/sqlearn/dashboard.png',
+			'/images/sqlearn/editor.png',
+		]
 	},
 	{
 		title: 'Ybook',
@@ -60,6 +64,12 @@ export const projects: Project[] = [
 			'**Status**: Released, Technical Demo\n\n',
 		image: '/images/ybook-logo2.svg',
 		color: '#041513',
-		link: 'https://ybook.rotour.dev/'
+		link: 'https://ybook.rotour.dev/',
+		descriptionImages: [
+			'/images/ybook/dms.png',
+			'/images/ybook/feed2.png',
+			'/images/ybook/profile.png',
+			'/images/ybook/login.png',
+		]
 	}
 ];
