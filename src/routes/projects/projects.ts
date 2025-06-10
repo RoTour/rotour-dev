@@ -4,6 +4,7 @@ export type Project = {
 	image: string;
 	color: string;
 	link: string;
+	descriptionImages?: string[];
 };
 
 export const projects: Project[] = [
@@ -13,7 +14,14 @@ export const projects: Project[] = [
 		'\n\n **Status**: Online, +200 students taught',
 		image: '/images/ColorNoBg 16_9.svg',
 		color: '#1d1d1d',
-		link: 'https://raltech.school'
+		link: 'https://raltech.school',
+		descriptionImages: [
+			'/images/raltech/raltech-home.png',
+			'/images/raltech/raltech-cursus.png',
+			'/images/raltech/raltech-newcomers.png',
+			'/images/raltech/raltech-intranet-lessons.png',
+			'/images/raltech/raltech-intranet-submissions.png',
+		]
 	},
 	{
 		title: 'CodeRonin',
@@ -23,7 +31,12 @@ export const projects: Project[] = [
 			'**Status**: Production, 50 users',
 		image: '/images/coderonin-logo-text.svg',
 		color: '#1d1d1d',
-		link: 'https://coderonin.raltech.school'
+		link: 'https://coderonin.raltech.school',
+		descriptionImages: [
+			'/images/coderonin/coderonin-landing-page.jpeg',
+			'/images/coderonin/coderonin-exercise-page.jpeg',
+			'/images/coderonin/coderonin-dashboard.jpeg',
+		]
 	},
 	{
 		title: 'SQLearn',
