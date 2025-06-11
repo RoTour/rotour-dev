@@ -6,7 +6,7 @@
 	import { cn } from '$lib/utils.ts';
 </script>
 
-<aside class="fixed top-0 right-0 m-4 z-50">
+<aside class="hidden lg:block fixed top-0 right-0 m-4 z-50">
 	<Tooltip.Provider>
 		<Tooltip.Root>
 			<Tooltip.Trigger

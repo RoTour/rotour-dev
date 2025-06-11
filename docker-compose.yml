@@ -1,27 +1,7 @@
-version: "3.7"
-
 services:
-#  docker-labs-pocketbase:
-  #    container_name: docker-labs-pocketbase
-  #    image: augustodelg/pocketbase
-  #    restart: unless-stopped
-  #    ports:
-  #      - "10000:8090"
-  #    volumes:
-  #      - pocketbase-data:/pb_data
-
-  rotour-dev:
-    container_name: rotour-dev-client
+  portfolio:
+    image: rotour/portfolio:new-version
     build:
       context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    ports:
-      - "10001:10001"
-    volumes:
-      - ./src:/app/src
-      - ./static:/app/static
-      - ./tailwind.config.cjs:/app/tailwind.config.cjs
-#
-#volumes:
-#  pocketbase-data:
+      dockerfile: Dockerfile.prod
+    platform: linux/amd64

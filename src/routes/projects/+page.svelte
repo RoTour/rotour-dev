@@ -4,14 +4,14 @@
   import SvelteMarkdown from 'svelte-markdown';
   import { fade, fly } from 'svelte/transition';
 
-  // Assuming these are your components, no change needed
+  // Component Imports
   import BgDecoration from '@components/background/BgDecoration.svelte';
   import Back from '@components/navigation/Back.svelte';
   import AnimationFragment from '@components/svelte/AnimationFragment.svelte';
-  import { getDeviceType } from '../../utils/tailwind-helper';
-  import { type Project, projects } from './projects';
-  import ProjectThumbnail from './ProjectThumnail.svelte';
   import Controls from '@components/controls/ControlsStore.svelte';
+  import { getDeviceType } from '../../utils/tailwind-helper';
+  import ProjectThumbnail from './ProjectThumnail.svelte';
+  import { type Project, projects } from './projects';
 
   // --- STATE ---
   let selectedProject: Project | null = $state(projects[0]);
@@ -24,42 +24,60 @@
   let nextProjectIndexToSelect = $state(0);
   let parallaxEnabled = $derived(Controls.isParallaxEnabled);
 
-  let projectsMobileContainer: HTMLDivElement | null = null;
+  // --- REFS ---
+  let projectsMobileContainer: HTMLDivElement | null = $state(null);
   let initialMousePosition: { x: number; y: number } | null = null;
 
   // --- METHODS ---
   const onClickProject = (project: Project) => {
     const onMobile = getDeviceType() !== 'desktop';
+    const index = projects.indexOf(project);
+
     if (onMobile) {
-      const index = projects.indexOf(project);
+      // [FIX] Directly update the selected project on mobile when a thumbnail is clicked.
+      // This ensures the description updates instantly along with the scroll.
+      selectedProject = project;
       scrollToProject(index);
       return;
     }
+
+    // Desktop logic
     preventWiggle = true;
-    nextProjectIndexToSelect = projects.indexOf(project) ?? 0;
+    nextProjectIndexToSelect = index;
+    // This logic handles the desktop fade-out/fade-in transition by briefly setting the project to null.
     if (selectedProject && nextProjectIndexToSelect !== projects.indexOf(selectedProject)) {
       selectedProject = null;
     }
   };
 
-  const getBlocksDimensions = (): [DOMRect, DOMRect] | [null, null] => {
-    if (!projectsMobileContainer) return [null, null];
-    const [marginEl, card] = [...projectsMobileContainer.getElementsByTagName('div')].map((it) =>
-      it.getBoundingClientRect()
-    );
-    return [marginEl, card];
-  };
-
+  /**
+   * Scrolls the mobile container to center the project thumbnail at the given index.
+   * This uses getBoundingClientRect() for a robust calculation.
+   */
   const scrollToProject = (index: number) => {
-    const [marginEl, card] = getBlocksDimensions();
-    if (!marginEl || !card || !projectsMobileContainer) return;
+    if (!projectsMobileContainer) return;
 
-    const gap = card.x - marginEl.width;
-    const offset = card.width + gap - window.innerWidth / 2;
-    const scrollDest = offset + index * (card.width + gap);
+    // The container's children include a leading placeholder div.
+    // So, the actual project element is at `index + 1`.
+    const targetElement = projectsMobileContainer.children[index + 1] as HTMLElement;
+    if (!targetElement) return;
+
+    // Get the exact positions of the container and the target element on the screen.
+    const containerRect = projectsMobileContainer.getBoundingClientRect();
+    const targetRect = targetElement.getBoundingClientRect();
+
+    // Calculate the center point of the container and the target.
+    const containerCenter = containerRect.left + containerRect.width / 2;
+    const targetCenter = targetRect.left + targetRect.width / 2;
+
+    // The distance to scroll is the difference between the centers.
+    const scrollOffset = targetCenter - containerCenter;
+    
+    // Get the current scroll position and add the offset to find the destination.
+    const currentScrollLeft = projectsMobileContainer.scrollLeft;
 
     projectsMobileContainer.scrollTo({
-      left: scrollDest,
+      left: currentScrollLeft + scrollOffset,
       behavior: 'smooth'
     });
   };
@@ -95,55 +113,76 @@
   // --- LIFECYCLE & EFFECTS ---
   onMount(() => {
     const isMobile = getDeviceType() !== 'desktop';
-    document.body.style.overflow = isMobile ? 'scroll' : 'hidden';
-    document.body.style.overflowX = isMobile ? 'scroll' : 'hidden';
 
-    if (isMobile) {
-      scrollToProject(0);
-    }
+    // This logic calculates the placeholder width to center the first and last items.
+    // It needs to run after the DOM is painted, so a short delay can help.
+    setTimeout(() => {
+        const firstCard = projectsMobileContainer?.children[1] as HTMLElement | undefined;
+        if (isMobile && firstCard) {
+          const cardRect = firstCard.getBoundingClientRect();
+          const containerRect = projectsMobileContainer!.getBoundingClientRect();
+          placeholderWidth = containerRect.width / 2 - cardRect.width / 2;
+        } else {
+            placeholderWidth = 0;
+        }
 
-    const [marginEl, card] = getBlocksDimensions();
-    if (card && marginEl) {
-      placeholderWidth = document.body.clientWidth / 2 - card.width / 2 - (card.x - marginEl.width);
-    }
-
-    return () => {
-      document.body.style.overflow = 'auto';
-      document.body.style.overflowX = 'auto';
-    };
+        if (isMobile) {
+            // Initially scroll to the first project to ensure it's centered on load
+            scrollToProject(0);
+        }
+    }, 0);
   });
 
+
+  /**
+   * This effect uses IntersectionObserver for efficient detection of which
+   * item is in the center after a user scrolls freely.
+   */
   $effect(() => {
-    if (projectsMobileContainer) {
-      const isMobile = getDeviceType() !== 'desktop';
+    const isMobile = getDeviceType() !== 'desktop';
 
-      const handleScroll = (e: Event) => {
-        const [marginEl, card] = getBlocksDimensions();
-        if (!card || !marginEl) return;
-        const margin = card.x - marginEl.width;
-        const cardWidth = card.width;
-        const scroll = (e.target as HTMLDivElement).scrollLeft;
-        const cardIndex = Math.round(scroll / (cardWidth + margin));
-        selectedProject = projects[cardIndex];
-      };
+    if (isMobile) {
+      if (!projectsMobileContainer) return;
 
-      if (isMobile) {
-        projectsMobileContainer.addEventListener('scroll', handleScroll);
-      } else {
-        document.body.addEventListener('mousemove', moveBlock);
-      }
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (!projectsMobileContainer) return;
+          const intersectingEntry = entries.find((e) => e.isIntersecting);
+          if (!intersectingEntry) return;
 
-      return () => {
-        if (isMobile) {
-          projectsMobileContainer?.removeEventListener('scroll', handleScroll);
-        } else {
-          document.body.removeEventListener('mousemove', moveBlock);
+          const target = intersectingEntry.target;
+          const children = Array.from(projectsMobileContainer.children);
+          const domIndex = children.indexOf(target);
+          
+          const projectIndex = domIndex - 1; // account for placeholder
+
+          if (projectIndex >= 0 && projectIndex < projects.length) {
+            if(selectedProject?.title !== projects[projectIndex].title) {
+                selectedProject = projects[projectIndex];
+            }
+          }
+        },
+        {
+          root: projectsMobileContainer,
+          // This margin creates a 1px vertical line in the horizontal center of the viewport
+          // which an item must cross to be considered "intersecting".
+          rootMargin: '0px -49.9% 0px -49.9%',
+          threshold: 0.5
         }
-      };
+      );
+
+      const projectElements = Array.from(projectsMobileContainer.children).slice(1, -1);
+      projectElements.forEach((el) => observer.observe(el));
+
+      return () => observer.disconnect();
+    } else {
+      document.body.addEventListener('mousemove', moveBlock);
+      return () => document.body.removeEventListener('mousemove', moveBlock);
     }
   });
 </script>
 
+<!-- TEMPLATE -->
 <AnimationFragment className="lg:overflow-y-hidden lg:h-screen flex flex-col" {visible}>
   <div class="relative z-20">
     <Back links={[{ name: 'Back', href: '/' }]} on:navigate={() => (visible = false)} />
@@ -183,7 +222,6 @@
     </div>
   </div>
 
-  <!-- MODIFIED: Added lg:min-h-0 to allow child overflow -->
   <div
     class="grid grid-cols-1 lg:grid-cols-5 flex-1 lg:px-4 relative z-10 mt-12 lg:min-h-0"
     in:fade={{ duration: 300, delay: 300 }}
@@ -191,27 +229,29 @@
   >
     <div
       bind:this={projectsMobileContainer}
-      class="flex flex-row overflow-x-scroll lg:overflow-x-auto lg:flex-col gap-4 items-center snap-x snap-mandatory py-4
+      class="flex flex-row overflow-x-scroll lg:overflow-x-visible lg:flex-col gap-4 items-center snap-x snap-mandatory py-4
                 lg:py-0 lg:gap-8 lg:mx-0 lg:justify-center lg:mt-4 lg:col-span-2"
       style="transform: {projectsThumbnailsTranslate}"
     >
-      <div class="snap-center h-[15vh] lg:hidden" style="min-width: {placeholderWidth}px"></div>
-      {#each projects as project}
-        <div
+      <!-- This placeholder helps center the first item. 'snap-center' is removed. -->
+      <div class="h-[15vh] lg:hidden" style="min-width: {placeholderWidth}px; flex-shrink: 0;"></div>
+      {#each projects as project, i (project.title)}
+        <button
           class="h-[15vh] aspect-video cursor-pointer transition-all duration-300 snap-center
                     {selectedProject?.title === project.title
             ? `lg:scale-110 lg:translate-x-4 ${!preventWiggle && 'lg:hover:animate-project-card-selected-hover'}`
             : 'lg:opacity-50 lg:-translate-x-4 lg:duration-200 lg:hover:translate-x-0'}"
+          style="flex-shrink: 0;"
           onmouseleave={() => (preventWiggle = false)}
           onclick={() => onClickProject(project)}
           onkeydown={() => onClickProject(project)}
         >
           <ProjectThumbnail imageLink={project.image} bgColor={project.color} />
-        </div>
+        </button>
       {/each}
-      <div class="snap-center h-[15vh] lg:hidden" style="min-width: {placeholderWidth}px"></div>
+       <!-- This placeholder helps center the last item. 'snap-center' is removed. -->
+      <div class="h-[15vh] lg:hidden" style="min-width: {placeholderWidth}px; flex-shrink: 0;"></div>
     </div>
-    <!-- MODIFIED: Removed justify-center on desktop to allow content to scroll from the top -->
     <div
       class="flex flex-col gap-4 prose lg:col-span-3 p-4 overflow-y-auto"
       style="transform: {projectDescriptionTranslate}"
@@ -219,10 +259,10 @@
       {#if selectedProject}
         <div
           class="min-h-0"
-          transition:fly={{ x: 500, duration: 300 }}
+          transition:fly|local={{ x: 500, duration: 300 }}
           onoutroend={onDesktopTransitionEnd}
         >
-          <h1 class="font-poppins-bold text-5xl mt-4 lg:mt-0 mb-0 lg:mb-4">
+          <h1 class="font-poppins-bold text-3xl lg:text-5xl mt-4 lg:mt-0 mb-0 lg:mb-4">
             {selectedProject.title}
           </h1>
           <div
@@ -231,7 +271,6 @@
             <SvelteMarkdown source={selectedProject.description} />
           </div>
 
-          <!-- NEW: Image gallery section -->
           {#if selectedProject.descriptionImages && selectedProject.descriptionImages.length > 0}
             <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 not-prose">
               {#each selectedProject.descriptionImages as imgUrl}
@@ -242,7 +281,6 @@
                     class="rounded-lg shadow-lg w-full object-cover aspect-video"
                   />
                 </a>
-                <!-- onerror="this.onerror=null;this.src='https://placehold.co/600x400/2d2d2d/ffffff?text=Image+not+found';" -->
               {/each}
             </div>
           {/if}
