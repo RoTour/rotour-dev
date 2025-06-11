@@ -34,8 +34,6 @@
     const index = projects.indexOf(project);
 
     if (onMobile) {
-      // [FIX] Directly update the selected project on mobile when a thumbnail is clicked.
-      // This ensures the description updates instantly along with the scroll.
       selectedProject = project;
       scrollToProject(index);
       return;
@@ -44,7 +42,6 @@
     // Desktop logic
     preventWiggle = true;
     nextProjectIndexToSelect = index;
-    // This logic handles the desktop fade-out/fade-in transition by briefly setting the project to null.
     if (selectedProject && nextProjectIndexToSelect !== projects.indexOf(selectedProject)) {
       selectedProject = null;
     }
@@ -57,23 +54,14 @@
   const scrollToProject = (index: number) => {
     if (!projectsMobileContainer) return;
 
-    // The container's children include a leading placeholder div.
-    // So, the actual project element is at `index + 1`.
     const targetElement = projectsMobileContainer.children[index + 1] as HTMLElement;
     if (!targetElement) return;
 
-    // Get the exact positions of the container and the target element on the screen.
     const containerRect = projectsMobileContainer.getBoundingClientRect();
     const targetRect = targetElement.getBoundingClientRect();
-
-    // Calculate the center point of the container and the target.
     const containerCenter = containerRect.left + containerRect.width / 2;
     const targetCenter = targetRect.left + targetRect.width / 2;
-
-    // The distance to scroll is the difference between the centers.
     const scrollOffset = targetCenter - containerCenter;
-    
-    // Get the current scroll position and add the offset to find the destination.
     const currentScrollLeft = projectsMobileContainer.scrollLeft;
 
     projectsMobileContainer.scrollTo({
@@ -84,7 +72,6 @@
 
   const moveBlock = (e: MouseEvent) => {
     if (!parallaxEnabled) {
-      // Reset translations if parallax is disabled
       projectsThumbnailsTranslate = '';
       projectDescriptionTranslate = '';
       bgTranslate = '';
@@ -114,8 +101,12 @@
   onMount(() => {
     const isMobile = getDeviceType() !== 'desktop';
 
+    // [FIX] Prevent the main page body from scrolling on desktop for a cleaner, app-like feel.
+    if (!isMobile) {
+      document.body.style.overflow = 'hidden';
+    }
+
     // This logic calculates the placeholder width to center the first and last items.
-    // It needs to run after the DOM is painted, so a short delay can help.
     setTimeout(() => {
         const firstCard = projectsMobileContainer?.children[1] as HTMLElement | undefined;
         if (isMobile && firstCard) {
@@ -127,10 +118,15 @@
         }
 
         if (isMobile) {
-            // Initially scroll to the first project to ensure it's centered on load
             scrollToProject(0);
         }
     }, 0);
+
+    // [FIX] Cleanup function to restore body scrolling when the component is unmounted.
+    // This is crucial to prevent side-effects on other pages.
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   });
 
 
@@ -146,7 +142,6 @@
 
       const observer = new IntersectionObserver(
         (entries) => {
-          if (!projectsMobileContainer) return;
           const intersectingEntry = entries.find((e) => e.isIntersecting);
           if (!intersectingEntry) return;
 
@@ -164,8 +159,6 @@
         },
         {
           root: projectsMobileContainer,
-          // This margin creates a 1px vertical line in the horizontal center of the viewport
-          // which an item must cross to be considered "intersecting".
           rootMargin: '0px -49.9% 0px -49.9%',
           threshold: 0.5
         }
@@ -262,7 +255,7 @@
           transition:fly|local={{ x: 500, duration: 300 }}
           onoutroend={onDesktopTransitionEnd}
         >
-          <h1 class="font-poppins-bold text-3xl lg:text-5xl mt-4 lg:mt-0 mb-0 lg:mb-4">
+          <h1 class="font-poppins-bold text-3xl mt-4 lg:mt-0 mb-0 lg:mb-4">
             {selectedProject.title}
           </h1>
           <div
@@ -287,7 +280,7 @@
 
           {#if selectedProject.link}
             <a
-              class="block mt-6 font-poppins-bold text-secondary not-prose no-underline"
+              class="block mt-6 font-poppins-bold text-secondary not-prose no-underline pb-8"
               href={selectedProject.link}
               rel="noreferrer"
               target="_blank"

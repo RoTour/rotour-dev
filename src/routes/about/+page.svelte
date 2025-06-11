@@ -92,7 +92,7 @@
         <img
           src="/images/pp-linkedin.webp"
           alt="A portrait"
-          class="rounded-lg shadow-2xl object-cover w-full max-w-sm aspect-[4/5]"
+          class="rounded-lg shadow-2xl object-cover w-3/4 lg:w-full max-w-sm aspect-[1/1] lg:aspect-[4/5] mt-16 lg:mt-0"
           onerror={(e: Event) => {
             const target = e.target as HTMLImageElement;
             target.src = 'https://placehold.co/500x600/1a1a1a/ffffff?text=Image+Not+Found'
@@ -138,7 +138,7 @@
           <div class="mt-4">
             <a
               href="https://raltech.school/blog"
-              class="group inline-flex items-center gap-3 bg-gray-100 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700/50 transition-all duration-300 rounded-lg px-6 py-4 text-lg font-poppins-bold no-underline"
+              class="group inline-flex items-center gap-3 bg-gray-100 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700/50 transition-all duration-300 rounded-lg px-6 py-4 text-lg font-poppins-bold no-underline mb-8 lg:mb-0"
             >
               <span>Read My Blog</span>
               <span class="transition-transform duration-300 group-hover:translate-x-1">
